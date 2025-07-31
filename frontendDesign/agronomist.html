@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shobji Vhander - Agronomist Dashboard</title>
+    <!-- Include Tailwind CSS via CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS for components to mimic shadcn/ui look */
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background: #f0fdf4; /* green-50 */
+            padding: 16px;
+            border-bottom: 1px solid #e5e7eb; /* gray-200 */
+            border-radius: 8px 8px 0 0;
+        }
+        .card-content {
+            padding: 24px;
+        }
+        .btn-primary {
+            background-color: #16a34a; /* green-600 */
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        .btn-primary:hover {
+            background-color: #15803d; /* green-700 */
+        }
+        .btn-danger {
+            background-color: #dc2626; /* red-600 */
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        .btn-danger:hover {
+            background-color: #b91c1c; /* red-700 */
+        }
+        .input-field {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db; /* gray-300 */
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #16a34a; /* green-600 */
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1); /* green-600 with opacity */
+        }
+        .textarea-field {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db; /* gray-300 */
+            border-radius: 6px;
+            font-size: 14px;
+            resize: vertical;
+        }
+        .textarea-field:focus {
+            outline: none;
+            border-color: #16a34a; /* green-600 */
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1); /* green-600 with opacity */
+        }
+        .select-field {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db; /* gray-300 */
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            appearance: none; /* Remove default arrow */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%236b7280' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1.5em 1.5em;
+        }
+        .select-field:focus {
+            outline: none;
+            border-color: #16a34a; /* green-600 */
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1); /* green-600 with opacity */
+        }
+        .label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: #374151; /* gray-700 */
+        }
+        .badge-excellent {
+            background-color: #16a34a; /* green-600 */
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .badge-good {
+            background-color: #eab308; /* yellow-500 */
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .badge-poor {
+            background-color: #dc2626; /* red-600 */
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100">
+    <!-- Header -->
+    <header class="bg-green-700 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <!-- Leaf Icon (Lucide-react equivalent) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-leaf"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8a9 9 0 0 1-18 0c0-2 1-4 2-8 2 2.08 3.5 2.58 9 3.95"></path><path d="M18 8a3 3 0 0 0-3 3c0 1.5.8 2.85 2 4-.83-.5-2-1.47-2-4 0-1.5.8-2.85 2-4Z"></path></svg>
+                <h1 class="text-2xl font-bold">Shobji Vhander</h1>
+                <span class="text-green-200 text-sm">Inventory Management System</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="text-right">
+                    <p class="font-semibold">Dr. Rahul Sharma</p>
+                    <p class="text-green-200 text-sm">ID: AGR-2024-001</p>
+                </div>
+                <button class="bg-transparent border border-green-300 text-white hover:bg-green-600 px-3 py-1 rounded text-sm">
+                    <!-- LogOut Icon (Lucide-react equivalent) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out inline mr-2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="17 16 22 12 17 8"></polyline><line x1="22" x2="11" y1="12" y2="12"></line></svg>
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-6">
+        <div class="space-y-6">
+            <!-- Farmer Crops For Inventory Table -->
+            <div class="card border border-green-200">
+                <div class="card-header">
+                    <h2 class="text-green-800 font-semibold text-lg flex items-center">
+                        <!-- Package Icon (Lucide-react equivalent) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package mr-2"><path d="m7.5 4.27 9 5.15"></path><path d="M2.5 8.67 12 14l9.5-5.33"></path><path d="M12 22V14"></path><path d="M2.5 15.33 12 20.67l9.5-5.34"></path></svg>
+                        Farmer Crops For Inventory
+                    </h2>
+                </div>
+                <div class="card-content">
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse border border-green-200">
+                            <thead>
+                                <tr class="bg-green-100">
+                                    <th class="border border-green-200 p-2 text-left text-sm font-semibold">Farmer ID</th>
+                                    <th class="border border-green-200 p-2 text-left text-sm font-semibold">Farmer Name</th>
+                                    <th class="border border-green-200 p-2 text-left text-sm font-semibold">Crop Name</th>
+                                    <th class="border border-green-200 p-2 text-left text-sm font-semibold">Crop ID</th>
+                                    <th class="border border-green-200 p-2 text-left text-sm font-semibold">Harvest Date</th>
+                                    <th class="border border-green-200 p-2 text-left text-sm font-semibold">1st Usage</th>
+                                    <th class="border border-green-200 p-2 text-left text-sm font-semibold">2nd Usage</th>
+                                    <th class="border border-green-200 p-2 text-left text-sm font-semibold">3rd Usage</th>
+                                    <th class="border border-green-200 p-2 text-left text-sm font-semibold">Plot Size</th>
+                                    <th class="border border-green-200 p-2 text-left text-sm font-semibold">Temperature</th>
+                                    <th class="border border-green-200 p-2 text-left text-sm font-semibold">Humidity</th>
+                                    <th class="border border-green-200 p-2 text-left text-sm font-semibold">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="hover:bg-green-50">
+                                    <td class="border border-green-200 p-2 text-sm">F001</td>
+                                    <td class="border border-green-200 p-2 text-sm">Ravi Kumar</td>
+                                    <td class="border border-green-200 p-2 text-sm">Tomato</td>
+                                    <td class="border border-green-200 p-2 text-sm">C001</td>
+                                    <td class="border border-green-200 p-2 text-sm">2024-01-15</td>
+                                    <td class="border border-green-200 p-2 text-xs">NPK 10-10-10 (2kg) - 2024-01-01</td>
+                                    <td class="border border-green-200 p-2 text-xs">Urea (1.5kg) - 2024-01-08</td>
+                                    <td class="border border-green-200 p-2 text-xs">Pesticide A (500ml) - 2024-01-12</td>
+                                    <td class="border border-green-200 p-2 text-sm">2.5 acres</td>
+                                    <td class="border border-green-200 p-2 text-sm">25°C</td>
+                                    <td class="border border-green-200 p-2 text-sm">70%</td>
+                                    <td class="border border-green-200 p-2">
+                                        <button class="btn-danger">Remove</button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-green-50">
+                                    <td class="border border-green-200 p-2 text-sm">F002</td>
+                                    <td class="border border-green-200 p-2 text-sm">Sunita Devi</td>
+                                    <td class="border border-green-200 p-2 text-sm">Potato</td>
+                                    <td class="border border-green-200 p-2 text-sm">C002</td>
+                                    <td class="border border-green-200 p-2 text-sm">2024-01-20</td>
+                                    <td class="border border-green-200 p-2 text-xs">DAP (3kg) - 2024-01-02</td>
+                                    <td class="border border-green-200 p-2 text-xs">Potash (2kg) - 2024-01-10</td>
+                                    <td class="border border-green-200 p-2 text-xs">Fungicide B (300ml) - 2024-01-18</td>
+                                    <td class="border border-green-200 p-2 text-sm">3.0 acres</td>
+                                    <td class="border border-green-200 p-2 text-sm">22°C</td>
+                                    <td class="border border-green-200 p-2 text-sm">65%</td>
+                                    <td class="border border-green-200 p-2">
+                                        <button class="btn-danger">Remove</button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-green-50">
+                                    <td class="border border-green-200 p-2 text-sm">F003</td>
+                                    <td class="border border-green-200 p-2 text-sm">Mohan Singh</td>
+                                    <td class="border border-green-200 p-2 text-sm">Onion</td>
+                                    <td class="border border-green-200 p-2 text-sm">C003</td>
+                                    <td class="border border-green-200 p-2 text-sm">2024-01-25</td>
+                                    <td class="border border-green-200 p-2 text-xs">Organic Compost (5kg) - 2024-01-03</td>
+                                    <td class="border border-green-200 p-2 text-xs">NPK 20-20-20 (2kg) - 2024-01-15</td>
+                                    <td class="border border-green-200 p-2 text-xs">Insecticide C (400ml) - 2024-01-22</td>
+                                    <td class="border border-green-200 p-2 text-sm">1.8 acres</td>
+                                    <td class="border border-green-200 p-2 text-sm">28°C</td>
+                                    <td class="border border-green-200 p-2 text-sm">60%</td>
+                                    <td class="border border-green-200 p-2">
+                                        <button class="btn-danger">Remove</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rating and Shelf Life Assessment -->
+            <div class="card border border-green-200">
+                <div class="card-header">
+                    <h2 class="text-green-800 font-semibold text-lg flex items-center">
+                        <!-- Leaf Icon (Lucide-react equivalent) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-leaf mr-2"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8a9 9 0 0 1-18 0c0-2 1-4 2-8 2 2.08 3.5 2.58 9 3.95"></path><path d="M18 8a3 3 0 0 0-3 3c0 1.5.8 2.85 2 4-.83-.5-2-1.47-2-4 0-1.5.8-2.85 2-4Z"></path></svg>
+                        Rating and Shelf Life Assessment
+                    </h2>
+                </div>
+                <div class="card-content">
+                    <form class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label for="cropsId" class="label">Crops ID</label>
+                                <input type="text" id="cropsId" class="input-field" placeholder="Enter crop ID">
+                            </div>
+                            <div>
+                                <label for="cropsName" class="label">Crops Name</label>
+                                <input type="text" id="cropsName" class="input-field" placeholder="Enter crop name">
+                            </div>
+                            <div>
+                                <label for="farmerName" class="label">Farmer Name</label>
+                                <input type="text" id="farmerName" class="input-field" placeholder="Enter farmer name">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="cropsType" class="label">Crops Type</label>
+                                <select id="cropsType" class="select-field">
+                                    <option value="">Select crops type</option>
+                                    <option value="perishable">Perishable</option>
+                                    <option value="non-perishable">Non-Perishable</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="harvestedDate" class="label">Harvested Date</label>
+                                <input type="date" id="harvestedDate" class="input-field">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="rating" class="label">Rating out of 10</label>
+                                <div class="flex items-center space-x-4">
+                                    <input type="number" id="rating" min="1" max="10" class="input-field w-32" placeholder="Rate out of 10">
+                                    <!-- Placeholder badge, dynamic functionality would require JS -->
+                                    <span class="badge-excellent">Excellent</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="estimatedShelfLife" class="label">Estimated Shelf Life (days)</label>
+                                <input type="number" id="estimatedShelfLife" class="input-field" placeholder="Days">
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <h4 class="font-semibold text-green-800">Recommended Storage Conditions</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="storageTemp" class="label">Storage Temperature (°C)</label>
+                                    <input type="number" id="storageTemp" class="input-field" placeholder="Temperature">
+                                </div>
+                                <div>
+                                    <label for="storageHumidity" class="label">Storage Humidity (%)</label>
+                                    <input type="number" id="storageHumidity" class="input-field" placeholder="Humidity %">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="storageRecommendation" class="label">Recommendation for Storage</label>
+                                <textarea id="storageRecommendation" class="textarea-field" rows="3" placeholder="Provide detailed storage recommendations..."></textarea>
+                            </div>
+                        </div>
+                        <div class="flex justify-end pt-4">
+                            <button type="submit" class="btn-primary">Submit Assessment (Send to Farmer & Manager)</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Farmer Response Table -->
+            <div class="card border border-green-200">
+                <div class="card-header">
+                    <h2 class="text-green-800 font-semibold text-lg flex items-center">
+                        <!-- Package Icon (Lucide-react equivalent) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package mr-2"><path d="m7.5 4.27 9 5.15"></path><path d="M2.5 8.67 12 14l9.5-5.33"></path><path d="M12 22V14"></path><path d="M2.5 15.33 12 20.67l9.5-5.34"></path></svg>
+                        Farmer Response
+                    </h2>
+                </div>
+                <div class="card-content">
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse border border-green-200">
+                            <thead>
+                                <tr class="bg-green-100">
+                                    <th class="border border-green-200 p-3 text-left text-sm font-semibold">Farmer ID</th>
+                                    <th class="border border-green-200 p-3 text-left text-sm font-semibold">Crops ID</th>
+                                    <th class="border border-green-200 p-3 text-left text-sm font-semibold">Farmer Query</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="hover:bg-green-50">
+                                    <td class="border border-green-200 p-3 text-sm">F001</td>
+                                    <td class="border border-green-200 p-3 text-sm">C001</td>
+                                    <td class="border border-green-200 p-3 text-sm">
+                                        Need advice on pest control for tomatoes. Noticed some leaf damage.
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-green-50">
+                                    <td class="border border-green-200 p-3 text-sm">F002</td>
+                                    <td class="border border-green-200 p-3 text-sm">C002</td>
+                                    <td class="border border-green-200 p-3 text-sm">
+                                        Potato storage recommendations needed. Current storage showing humidity issues.
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-green-50">
+                                    <td class="border border-green-200 p-3 text-sm">F003</td>
+                                    <td class="border border-green-200 p-3 text-sm">C003</td>
+                                    <td class="border border-green-200 p-3 text-sm">
+                                        Onion crop quality declining. Request for immediate assessment and guidance.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Crop Health Recommendations -->
+            <div class="card border border-green-200">
+                <div class="card-header">
+                    <h2 class="text-green-800 font-semibold text-lg flex items-center">
+                        <!-- AlertTriangle Icon (Lucide-react equivalent) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-alert-triangle mr-2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+                        Crop Health Recommendations
+                    </h2>
+                </div>
+                <div class="card-content">
+                    <form class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="cropIdHealth" class="label">Crops ID</label>
+                                <input type="text" id="cropIdHealth" class="input-field" placeholder="Enter crop ID">
+                            </div>
+                            <div>
+                                <label for="farmerIdHealth" class="label">Farmer ID</label>
+                                <input type="text" id="farmerIdHealth" class="input-field" placeholder="Enter farmer ID">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="healthRecommendations" class="label">Recommendations to Farmer</label>
+                            <textarea id="healthRecommendations" class="textarea-field" rows="4" placeholder="Provide detailed health recommendations and improvement suggestions for the farmer..."></textarea>
+                        </div>
+                        <div class="flex justify-end">
+                            <button type="submit" class="btn-primary">Submit Recommendations</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
