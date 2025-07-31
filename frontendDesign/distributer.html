@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distributor Dashboard - Shobji Bhander</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url('/placeholder.svg?height=1080&width=1920');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #333;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.3);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .system-name h1 {
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+        }
+
+        .system-name p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .distributor-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .distributor-details {
+            text-align: right;
+        }
+
+        .distributor-details h3 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .distributor-details p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: white;
+            color: #27ae60;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e8f5e8;
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+        }
+
+        .card h2 {
+            color: #27ae60;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #27ae60;
+            padding-bottom: 10px;
+        }
+
+        .stats-card {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            text-align: center;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.3);
+        }
+
+        .stats-card h2 {
+            color: white;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .stats-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .stats-label {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        table th,
+        table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e8f5e8;
+        }
+
+        table th {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            font-weight: 600;
+            color: white;
+        }
+
+        table tr:hover {
+            background-color: #f0f8f0;
+        }
+
+        .btn {
+            background: #27ae60;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
+        }
+
+        .btn:hover {
+            background: #229954;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(39, 174, 96, 0.4);
+        }
+
+        .btn-disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        .btn-disabled:hover {
+            background: #7f8c8d;
+            transform: none;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-confirmed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-transit {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2c5530;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #a8d5a8;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #27ae60;
+            box-shadow: 0 0 5px rgba(39, 174, 96, 0.3);
+        }
+
+        .delivery-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        .product-tag {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .product-perishable {
+            background: #ffecb3;
+            color: #7e5700;
+        }
+
+        .product-non-perishable {
+            background: #c8e6c9;
+            color: #1b5e20;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            .distributor-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .distributor-details {
+                text-align: center;
+            }
+            
+            .delivery-form {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="system-name">
+                    <h1>Shobji Bhander</h1>
+                    <p>Distribution Management System</p>
+                </div>
+                <div class="distributor-info">
+                    <div class="distributor-details">
+                        <h3>Abdul Karim</h3>
+                        <p>Distributor ID: DIST-2024-005</p>
+                    </div>
+                    <button class="logout-btn">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Supplies Stats -->
+        <div class="stats-card">
+            <h2>Distribution Performance</h2>
+            <div class="stats-number">247</div>
+            <div class="stats-label">Total Supplies Completed</div>
+        </div>
+
+        <!-- Delivery Confirmation Table -->
+        <div class="card">
+            <h2>Pending Deliveries</h2>
+            <table id="deliveryConfirmationTable">
+                <thead>
+                    <tr>
+                        <th>Location</th>
+                        <th>Product ID</th>
+                        <th>Product Type</th>
+                        <th>Inventory Name</th>
+                        <th>Owner Name</th>
+                        <th>Contact</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Savar, Dhaka</td>
+                        <td>PRD-2024-001</td>
+                        <td><span class="product-tag product-perishable">Perishable</span></td>
+                        <td>Green Valley Storage</td>
+                        <td>Md. Rahman</td>
+                        <td>+880 1712-345678</td>
+                        <td><span class="status-badge status-pending">Pending</span></td>
+                        <td><button class="btn" onclick="confirmDelivery(this)">Done</button></td>
+                    </tr>
+                    <tr>
+                        <td>Mirpur, Dhaka</td>
+                        <td>PRD-2024-002</td>
+                        <td><span class="product-tag product-non-perishable">Non-perishable</span></td>
+                        <td>Mirpur Cold Storage</td>
+                        <td>Rahim Khan</td>
+                        <td>+880 1812-345678</td>
+                        <td><span class="status-badge status-transit">In Transit</span></td>
+                        <td><button class="btn" onclick="confirmDelivery(this)">Done</button></td>
+                    </tr>
+                    <tr>
+                        <td>Gazipur, Dhaka</td>
+                        <td>PRD-2024-003</td>
+                        <td><span class="product-tag product-perishable">Perishable</span></td>
+                        <td>Gazipur Fresh Storage</td>
+                        <td>Kamal Hossain</td>
+                        <td>+880 1912-345678</td>
+                        <td><span class="status-badge status-pending">Pending</span></td>
+                        <td><button class="btn" onclick="confirmDelivery(this)">Done</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Delivery Timestamp Input -->
+        <div class="card">
+            <h2>Delivery Timestamp</h2>
+            <form id="deliveryTimestampForm">
+                <div class="delivery-form">
+                    <div class="form-group">
+                        <label for="productId">Product ID</label>
+                        <select id="productId" name="productId" required>
+                            <option value="">Select Product ID</option>
+                            <option value="PRD-2024-001">PRD-2024-001</option>
+                            <option value="PRD-2024-002">PRD-2024-002</option>
+                            <option value="PRD-2024-003">PRD-2024-003</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="deliveryDate">Delivery Date</label>
+                        <input type="date" id="deliveryDate" name="deliveryDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="deliveryTime">Delivery Time</label>
+                        <input type="time" id="deliveryTime" name="deliveryTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="deliveryDuration">Delivery Duration (hours)</label>
+                        <input type="number" id="deliveryDuration" name="deliveryDuration" step="0.5" min="0.5" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="quantityDelivered">Quantity Delivered (kg)</label>
+                        <input type="number" id="quantityDelivered" name="quantityDelivered" step="0.1" min="1" required>
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: flex-end;">
+                        <button type="submit" class="btn">Submit Timestamp</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Completed Deliveries -->
+        <div class="card">
+            <h2>Completed Deliveries</h2>
+            <table id="completedDeliveriesTable">
+                <thead>
+                    <tr>
+                        <th>Delivery Date</th>
+                        <th>Product ID</th>
+                        <th>Product Name</th>
+                        <th>Product Type</th>
+                        <th>Quantity (kg)</th>
+                        <th>Inventory Name</th>
+                        <th>Location</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2024-01-20</td>
+                        <td>PRD-2024-004</td>
+                        <td>Rice</td>
+                        <td><span class="product-tag product-non-perishable">Non-perishable</span></td>
+                        <td>500</td>
+                        <td>Uttara Storage</td>
+                        <td>Uttara, Dhaka</td>
+                    </tr>
+                    <tr>
+                        <td>2024-01-18</td>
+                        <td>PRD-2024-005</td>
+                        <td>Potatoes</td>
+                        <td><span class="product-tag product-perishable">Perishable</span></td>
+                        <td>300</td>
+                        <td>Green Valley Storage</td>
+                        <td>Savar, Dhaka</td>
+                    </tr>
+                    <tr>
+                        <td>2024-01-15</td>
+                        <td>PRD-2024-006</td>
+                        <td>Wheat</td>
+                        <td><span class="product-tag product-non-perishable">Non-perishable</span></td>
+                        <td>750</td>
+                        <td>Mirpur Cold Storage</td>
+                        <td>Mirpur, Dhaka</td>
+                    </tr>
+                    <tr>
+                        <td>2024-01-12</td>
+                        <td>PRD-2024-007</td>
+                        <td>Onions</td>
+                        <td><span class="product-tag product-perishable">Perishable</span></td>
+                        <td>250</td>
+                        <td>Gazipur Fresh Storage</td>
+                        <td>Gazipur, Dhaka</td>
+                    </tr>
+                    <tr>
+                        <td>2024-01-10</td>
+                        <td>PRD-2024-008</td>
+                        <td>Lentils</td>
+                        <td><span class="product-tag product-non-perishable">Non-perishable</span></td>
+                        <td>400</td>
+                        <td>Uttara Storage</td>
+                        <td>Uttara, Dhaka</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current date for date input
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('deliveryDate').value = today;
+            document.getElementById('deliveryDate').max = today;
+            
+            // Set current time for time input
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('deliveryTime').value = `${hours}:${minutes}`;
+        });
+
+        // Delivery confirmation
+        function confirmDelivery(button) {
+            const row = button.closest('tr');
+            const statusCell = row.querySelector('.status-badge');
+            statusCell.textContent = 'Confirmed';
+            statusCell.className = 'status-badge status-confirmed';
+            button.textContent = 'Confirmed';
+            button.disabled = true;
+            button.className = 'btn btn-disabled';
+            
+            // Update total supplies count
+            const statsNumber = document.querySelector('.stats-number');
+            const currentCount = parseInt(statsNumber.textContent);
+            statsNumber.textContent = currentCount + 1;
+            
+            alert('Delivery confirmed successfully!');
+        }
+
+        // Form submission handler
+        document.getElementById('deliveryTimestampForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const productId = document.getElementById('productId').value;
+            const deliveryDate = document.getElementById('deliveryDate').value;
+            const deliveryTime = document.getElementById('deliveryTime').value;
+            const deliveryDuration = document.getElementById('deliveryDuration').value;
+            const quantityDelivered = document.getElementById('quantityDelivered').value;
+            
+            alert(`Timestamp submitted for Product ${productId}:\nDate: ${deliveryDate}\nTime: ${deliveryTime}\nDuration: ${deliveryDuration} hours\nQuantity: ${quantityDelivered} kg`);
+            
+            // Reset form
+            this.reset();
+            
+            // Set current date and time again
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('deliveryDate').value = today;
+            
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('deliveryTime').value = `${hours}:${minutes}`;
+        });
+    </script>
+</body>
+</html>
