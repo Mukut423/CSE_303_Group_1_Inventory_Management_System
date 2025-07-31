@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sosho Bhander - Farmer Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f9fafb;
+            color: #111827;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header Styles */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+            padding: 0 2rem;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 32px;
+            height: 32px;
+            color: #16a34a;
+            margin-right: 8px;
+        }
+
+        .system-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #111827;
+            margin-right: 8px;
+        }
+
+        .system-subtitle {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .farmer-info {
+            display: flex;
+            align-items: center;
+            background: #f9fafb;
+            padding: 12px 24px;
+            border-radius: 8px;
+            gap: 24px;
+        }
+
+        .farmer-details {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .farmer-avatar {
+            width: 48px;
+            height: 48px;
+            background: #dcfce7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #16a34a;
+        }
+
+        .farmer-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .farmer-id {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .divider {
+            width: 1px;
+            height: 32px;
+            background: #d1d5db;
+        }
+
+        .contact-info {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border: 1px solid #fecaca;
+            background: transparent;
+            color: #dc2626;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #fef2f2;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-title {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #6b7280;
+        }
+
+        .stat-icon {
+            width: 16px;
+            height: 16px;
+            color: #9ca3af;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .stat-description {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-green { background: #16a34a; color: white; }
+        .btn-green:hover { background: #15803d; }
+        .btn-blue { background: #2563eb; color: white; }
+        .btn-blue:hover { background: #1d4ed8; }
+        .btn-red { background: #dc2626; color: white; }
+        .btn-red:hover { background: #b91c1c; }
+        .btn-orange { background: #ea580c; color: white; }
+        .btn-orange:hover { background: #c2410c; }
+        .btn-purple { background: #9333ea; color: white; }
+        .btn-purple:hover { background: #7c3aed; }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            padding: 1.5rem 1.5rem 0;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-content {
+            padding: 0 1.5rem 1.5rem;
+        }
+
+        /* Forms */
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Alerts */
+        .alerts-section {
+            margin-bottom: 2rem;
+        }
+
+        .alerts-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .alert {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            border: 1px solid;
+        }
+
+        .alert-approved {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+        }
+
+        .alert-rejected {
+            background: #fef2f2;
+            border-color: #fecaca;
+        }
+
+        .alert-pending {
+            background: #fffbeb;
+            border-color: #fed7aa;
+        }
+
+        .alert-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .alert-icon {
+            width: 16px;
+            height: 16px;
+            margin-top: 2px;
+        }
+
+        .alert-icon.approved { color: #16a34a; }
+        .alert-icon.rejected { color: #dc2626; }
+        .alert-icon.pending { color: #d97706; }
+
+        .alert-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .alert-description {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+
+        .alert-date {
+            font-size: 0.75rem;
+            color: #9ca3af;
+        }
+
+        .alert-close {
+            background: none;
+            border: none;
+            color: #dc2626;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .alert-close:hover {
+            background: #fef2f2;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-green {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-blue {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-yellow {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-red {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-outline-green {
+            background: transparent;
+            color: #16a34a;
+            border: 1px solid #16a34a;
+        }
+
+        .badge-outline-blue {
+            background: transparent;
+            color: #2563eb;
+            border: 1px solid #2563eb;
+        }
+
+        /* Crop Items */
+        .crop-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .crop-info {
+            flex: 1;
+        }
+
+        .crop-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 4px;
+        }
+
+        .crop-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .crop-details {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .crop-quantity {
+            text-align: right;
+        }
+
+        .quantity-value {
+            font-weight: 600;
+        }
+
+        .quantity-date {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        /* Stored Crop Items */
+        .stored-crop-item {
+            padding: 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .stored-crop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .stored-crop-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .stored-crop-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .stored-crop-cost {
+            text-align: right;
+        }
+
+        .cost-total {
+            font-weight: 600;
+        }
+
+        .cost-rate {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .stored-crop-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-label {
+            color: #6b7280;
+        }
+
+        .stored-crop-quantity {
+            font-size: 0.875rem;
+        }
+
+        /* Cost Display */
+        .cost-display {
+            background: #f9fafb;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .cost-total-display {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .cost-rate-display {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        /* Hidden sections */
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                height: auto;
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .farmer-info {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <!-- Logo Section -->
+                <div class="logo-section">
+                    <svg class="logo" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L13.09 8.26L22 9L13.09 9.74L12 16L10.91 9.74L2 9L10.91 8.26L12 2Z"/>
+                    </svg>
+                    <h1 class="system-title">Sosho Bhander</h1>
+                    <span class="system-subtitle">Inventory Management System</span>
+                </div>
+
+                <!-- Farmer Info -->
+                <div class="farmer-info">
+                    <div class="farmer-details">
+                        <div class="farmer-avatar">
+                            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="farmer-name">John Doe</div>
+                            <div class="farmer-id">Farmer ID: FARM-2024-001</div>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="contact-info">
+                        <div>Punjab, India</div>
+                        <div>+91 98765 43210</div>
+                    </div>
+                </div>
+
+                <!-- Logout Button -->
+                <button class="logout-btn" onclick="logout()">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.59L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                    </svg>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Dashboard Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-title">Total Crops</div>
+                        <svg class="stat-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2L13.09 8.26L22 9L13.09 9.74L12 16L10.91 9.74L2 9L10.91 8.26L12 2Z"/>
+                        </svg>
+                    </div>
+                    <div class="stat-value">3</div>
+                    <div class="stat-description">1 active, 2 harvested</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-title">Total Harvested</div>
+                        <svg class="stat-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                    </div>
+                    <div class="stat-value">4,300</div>
+                    <div class="stat-description">kg this season</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-title">Crops in Inventory</div>
+                        <svg class="stat-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                        </svg>
+                    </div>
+                    <div class="stat-value">3,500</div>
+                    <div class="stat-description">kg stored</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-title">Quality Score</div>
+                        <svg class="stat-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M3 18h6v-2H3v2zM3 6v2h18V6H3zm0 7h12v-2H3v2z"/>
+                        </svg>
+                    </div>
+                    <div class="stat-value">8.5</div>
+                    <div class="stat-description">average rating</div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-green" onclick="toggleSection('addCrop')">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                    </svg>
+                    Add New Crop
+                </button>
+                <button class="btn btn-blue" onclick="toggleSection('updateHarvest')">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                    </svg>
+                    Update Harvest Information
+                </button>
+                <button class="btn btn-red" onclick="toggleSection('deleteCrop')">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                    </svg>
+                    Delete a Crop
+                </button>
+                <button class="btn btn-orange" onclick="toggleSection('inputUsage')">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/>
+                    </svg>
+                    Fertilizer/Pesticide Usage
+                </button>
+                <button class="btn btn-purple" onclick="toggleSection('requestStorage')">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                    Request Inventory Storage
+                </button>
+            </div>
+
+            <!-- Storage Request Alerts -->
+            <div class="alerts-section">
+                <h3 class="alerts-title">Storage Request Status</h3>
+                
+                <div class="alert alert-approved" id="alert-1">
+                    <div class="alert-content">
+                        <svg class="alert-icon approved" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                        <div>
+                            <div class="alert-title">Wheat - 2000 kg</div>
+                            <div class="alert-description">Storage approved. Batch number WH-2024-001 assigned.</div>
+                            <div class="alert-date">Requested on: 6/25/2024</div>
+                        </div>
+                    </div>
+                    <button class="alert-close" onclick="removeAlert('alert-1')">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 13H5v-2h14v2z"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="alert alert-approved" id="alert-2">
+                    <div class="alert-content">
+                        <svg class="alert-icon approved" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                        <div>
+                            <div class="alert-title">Corn - 1500 kg</div>
+                            <div class="alert-description">Storage approved. Batch number CR-2024-002 assigned.</div>
+                            <div class="alert-date">Requested on: 8/20/2024</div>
+                        </div>
+                    </div>
+                    <button class="alert-close" onclick="removeAlert('alert-2')">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 13H5v-2h14v2z"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="alert alert-rejected" id="alert-3">
+                    <div class="alert-content">
+                        <svg class="alert-icon rejected" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                        </svg>
+                        <div>
+                            <div class="alert-title">Rice - 1000 kg</div>
+                            <div class="alert-description">Storage rejected. Insufficient storage space available.</div>
+                            <div class="alert-date">Requested on: 12/1/2024</div>
+                        </div>
+                    </div>
+                    <button class="alert-close" onclick="removeAlert('alert-3')">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 13H5v-2h14v2z"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="alert alert-pending" id="alert-4">
+                    <div class="alert-content">
+                        <svg class="alert-icon pending" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                        </svg>
+                        <div>
+                            <div class="alert-title">Barley - 800 kg</div>
+                            <div class="alert-description">Request under review. Will be processed within 24 hours.</div>
+                            <div class="alert-date">Requested on: 12/15/2024</div>
+                        </div>
+                    </div>
+                    <button class="alert-close" onclick="removeAlert('alert-4')">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 13H5v-2h14v2z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Add New Crop Section -->
+            <div id="addCropSection" class="card hidden">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                        </svg>
+                        Add New Crop
+                    </h2>
+                </div>
+                <div class="card-content">
+                    <form class="form" onsubmit="addCrop(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="cropName">Crop Name</label>
+                                <input class="form-input" id="cropName" type="text" placeholder="e.g., Wheat" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="seedType">Seed Type</label>
+                                <input class="form-input" id="seedType" type="text" placeholder="e.g., Winter Wheat" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="sowingDate">Sowing Date</label>
+                                <input class="form-input" id="sowingDate" type="date" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="harvestDate">Expected Harvest Date</label>
+                                <input class="form-input" id="harvestDate" type="date" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="expectedQuantity">Expected Quantity</label>
+                                <input class="form-input" id="expectedQuantity" type="number" placeholder="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="unit">Unit</label>
+                                <select class="form-select" id="unit" required>
+                                    <option value="">Select unit</option>
+                                    <option value="kg">kg</option>
+                                    <option value="tons">tons</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-green" style="width: 100%;">Add Crop</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Update Harvest Section -->
+            <div id="updateHarvestSection" class="card hidden">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        Update Harvest Information
+                    </h2>
+                </div>
+                <div class="card-content">
+                    <form class="form" onsubmit="updateHarvest(event)">
+                        <div class="form-group">
+                            <label class="form-label" for="selectCrop">Select Crop</label>
+                            <select class="form-select" id="selectCrop" required>
+                                <option value="">Choose crop to update</option>
+                                <option value="1">Wheat - Winter Wheat</option>
+                                <option value="2">Corn - Sweet Corn</option>
+                                <option value="3">Tomatoes - Roma Tomatoes</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="harvestedQuantity">Harvested Quantity</label>
+                                <input class="form-input" id="harvestedQuantity" type="number" placeholder="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="harvestUnit">Unit</label>
+                                <select class="form-select" id="harvestUnit" required>
+                                    <option value="">Select unit</option>
+                                    <option value="kg">kg</option>
+                                    <option value="tons">tons</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="actualHarvestDate">Actual Harvest Date</label>
+                            <input class="form-input" id="actualHarvestDate" type="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="destination">Send To</label>
+                            <select class="form-select" id="destination" required>
+                                <option value="">Select destination</option>
+                                <option value="supplier">Supplier</option>
+                                <option value="inventory-manager">Inventory Manager</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-blue" style="width: 100%;">Update Harvest</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Delete Crop Section -->
+            <div id="deleteCropSection" class="card hidden">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                        </svg>
+                        Delete a Crop
+                    </h2>
+                </div>
+                <div class="card-content">
+                    <form class="form" onsubmit="deleteCrop(event)">
+                        <div class="form-group">
+                            <label class="form-label" for="deleteCropSelect">Select Crop to Delete</label>
+                            <select class="form-select" id="deleteCropSelect" required>
+                                <option value="">Choose crop to delete</option>
+                                <option value="1">Wheat - Winter Wheat</option>
+                                <option value="2">Corn - Sweet Corn</option>
+                                <option value="3">Tomatoes - Roma Tomatoes</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="deleteReason">Reason for Deletion</label>
+                            <textarea class="form-textarea" id="deleteReason" placeholder="Please explain why you want to delete this crop..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-red" style="width: 100%;">Delete Crop</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Input Usage Section -->
+            <div id="inputUsageSection" class="card hidden">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/>
+                        </svg>
+                        Log Fertilizer/Pesticide Usage
+                    </h2>
+                </div>
+                <div class="card-content">
+                    <form class="form" onsubmit="logInputUsage(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="inputCrop">Select Crop</label>
+                                <select class="form-select" id="inputCrop" required>
+                                    <option value="">Choose crop</option>
+                                    <option value="1">Wheat</option>
+                                    <option value="2">Corn</option>
+                                    <option value="3">Tomatoes</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="inputType">Input Type</label>
+                                <select class="form-select" id="inputType" required>
+                                    <option value="">Select type</option>
+                                    <option value="fertilizer">Fertilizer</option>
+                                    <option value="pesticide">Pesticide</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="productName">Product Name</label>
+                                <input class="form-input" id="productName" type="text" placeholder="e.g., NPK 20-20-20" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="inputQuantity">Quantity Used</label>
+                                <input class="form-input" id="inputQuantity" type="number" placeholder="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="inputUnit">Unit</label>
+                                <select class="form-select" id="inputUnit" required>
+                                    <option value="">Select unit</option>
+                                    <option value="kg">kg</option>
+                                    <option value="L">L</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="applicationDate">Application Date</label>
+                                <input class="form-input" id="applicationDate" type="date" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="notes">Notes (Optional)</label>
+                            <textarea class="form-textarea" id="notes" placeholder="Additional notes..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-orange" style="width: 100%;">Log Input Usage</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Request Storage Section -->
+            <div id="requestStorageSection" class="card hidden">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                        </svg>
+                        Request Inventory Storage
+                    </h2>
+                </div>
+                <div class="card-content">
+                    <form class="form" onsubmit="requestStorage(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="requestCrop">Select Crop</label>
+                                <select class="form-select" id="requestCrop" required>
+                                    <option value="">Choose crop</option>
+                                    <option value="1">Wheat - 2500 kg available</option>
+                                    <option value="2">Corn - 1800 kg available</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="requestQuantity">Quantity to Store</label>
+                                <input class="form-input" id="requestQuantity" type="number" placeholder="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="requestUnit">Unit</label>
+                                <select class="form-select" id="requestUnit" required>
+                                    <option value="kg">kg</option>
+                                    <option value="tons">tons</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="storageNotes">Storage Requirements (Optional)</label>
+                            <textarea class="form-textarea" id="storageNotes" placeholder="Special storage requirements..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-purple" style="width: 100%;">Request Storage</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- My Crops Overview -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">My Crops Overview</h2>
+                </div>
+                <div class="card-content">
+                    <div class="crop-item">
+                        <div class="crop-info">
+                            <div class="crop-header">
+                                <h3 class="crop-name">Wheat</h3>
+                                <span class="badge badge-outline-blue">Harvested</span>
+                                <span class="badge badge-blue">Good</span>
+                            </div>
+                            <div class="crop-details">Winter Wheat • Sown: 10/15/2024</div>
+                        </div>
+                        <div class="crop-quantity">
+                            <div class="quantity-value">2,500 kg</div>
+                            <div class="quantity-date">Harvest: 6/20/2024</div>
+                        </div>
+                    </div>
+
+                    <div class="crop-item">
+                        <div class="crop-info">
+                            <div class="crop-header">
+                                <h3 class="crop-name">Corn</h3>
+                                <span class="badge badge-outline-blue">Harvested</span>
+                                <span class="badge badge-green">Excellent</span>
+                            </div>
+                            <div class="crop-details">Sweet Corn • Sown: 4/10/2024</div>
+                        </div>
+                        <div class="crop-quantity">
+                            <div class="quantity-value">1,800 kg</div>
+                            <div class="quantity-date">Harvest: 8/15/2024</div>
+                        </div>
+                    </div>
+
+                    <div class="crop-item">
+                        <div class="crop-info">
+                            <div class="crop-header">
+                                <h3 class="crop-name">Tomatoes</h3>
+                                <span class="badge badge-outline-green">Growing</span>
+                                <span class="badge badge-blue">Good</span>
+                            </div>
+                            <div class="crop-details">Roma Tomatoes • Sown: 3/20/2024</div>
+                        </div>
+                        <div class="crop-quantity">
+                            <div class="quantity-value">Not harvested</div>
+                            <div class="quantity-date">Harvest: 7/30/2024</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stored Crops Overview -->
+            <div class="card">
+                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2 class="card-title">Stored Crops Overview</h2>
+                    <button class="btn btn-red" onclick="toggleSection('withdrawal')">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 13H5v-2h14v2z"/>
+                        </svg>
+                        Withdrawal
+                    </button>
+                </div>
+                <div class="card-content">
+                    <div class="stored-crop-item">
+                        <div class="stored-crop-header">
+                            <div class="stored-crop-title">
+                                <h3 class="stored-crop-name">Wheat</h3>
+                                <span class="badge badge-green">Fresh</span>
+                            </div>
+                            <div class="stored-crop-cost">
+                                <div class="cost-total">₹50,000</div>
+                                <div class="cost-rate">₹25/kg</div>
+                            </div>
+                        </div>
+                        <div class="stored-crop-details">
+                            <div><span class="detail-label">Batch:</span> WH-2024-001</div>
+                            <div><span class="detail-label">Stored:</span> 6/25/2024</div>
+                            <div><span class="detail-label">Expires:</span> 12/25/2024</div>
+                            <div><span class="detail-label">Days Left:</span> 183</div>
+                        </div>
+                        <div class="stored-crop-quantity">
+                            <span class="detail-label">Quantity:</span> 2000 kg
+                        </div>
+                    </div>
+
+                    <div class="stored-crop-item">
+                        <div class="stored-crop-header">
+                            <div class="stored-crop-title">
+                                <h3 class="stored-crop-name">Corn</h3>
+                                <span class="badge badge-yellow">Expiring Soon</span>
+                            </div>
+                            <div class="stored-crop-cost">
+                                <div class="cost-total">₹45,000</div>
+                                <div class="cost-rate">₹30/kg</div>
+                            </div>
+                        </div>
+                        <div class="stored-crop-details">
+                            <div><span class="detail-label">Batch:</span> CR-2024-002</div>
+                            <div><span class="detail-label">Stored:</span> 8/20/2024</div>
+                            <div><span class="detail-label">Expires:</span> 11/20/2024</div>
+                            <div><span class="detail-label">Days Left:</span> 28</div>
+                        </div>
+                        <div class="stored-crop-quantity">
+                            <span class="detail-label">Quantity:</span> 1500 kg
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Withdrawal Section -->
+            <div id="withdrawalSection" class="card hidden">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 13H5v-2h14v2z"/>
+                        </svg>
+                        Withdrawal Request
+                    </h2>
+                </div>
+                <div class="card-content">
+                    <form class="form" onsubmit="submitWithdrawal(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="withdrawalProduct">Select Product</label>
+                                <select class="form-select" id="withdrawalProduct" onchange="calculateCost()" required>
+                                    <option value="">Choose product</option>
+                                    <option value="1" data-rate="25">Wheat - 2000 kg available</option>
+                                    <option value="2" data-rate="30">Corn - 1500 kg available</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="withdrawalQuantity">Quantity (kg)</label>
+                                <input class="form-input" id="withdrawalQuantity" type="number" placeholder="0" oninput="calculateCost()" required>
+                            </div>
+                        </div>
+
+                        <div id="costDisplay" class="cost-display hidden">
+                            <div class="cost-total-display">Total Cost: ₹<span id="totalCost">0</span></div>
+                            <div class="cost-rate-display">Rate: ₹<span id="rateDisplay">0</span>/kg</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-red" style="width: 100%;">Submit Withdrawal Request</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Toggle section visibility
+        function toggleSection(sectionName) {
+            const sections = ['addCrop', 'updateHarvest', 'deleteCrop', 'inputUsage', 'requestStorage', 'withdrawal'];
+            const targetSection = sectionName + 'Section';
+            
+            sections.forEach(section => {
+                const element = document.getElementById(section + 'Section');
+                if (element) {
+                    if (section === sectionName) {
+                        element.classList.toggle('hidden');
+                    } else {
+                        element.classList.add('hidden');
+                    }
+                }
+            });
+        }
+
+        // Remove alert
+        function removeAlert(alertId) {
+            const alert = document.getElementById(alertId);
+            if (alert) {
+                alert.remove();
+            }
+        }
+
+        // Calculate withdrawal cost
+        function calculateCost() {
+            const productSelect = document.getElementById('withdrawalProduct');
+            const quantityInput = document.getElementById('withdrawalQuantity');
+            const costDisplay = document.getElementById('costDisplay');
+            const totalCostSpan = document.getElementById('totalCost');
+            const rateDisplaySpan = document.getElementById('rateDisplay');
+
+            if (productSelect.value && quantityInput.value) {
+                const selectedOption = productSelect.options[productSelect.selectedIndex];
+                const rate = parseInt(selectedOption.getAttribute('data-rate'));
+                const quantity = parseInt(quantityInput.value);
+                const totalCost = rate * quantity;
+
+                totalCostSpan.textContent = totalCost.toLocaleString();
+                rateDisplaySpan.textContent = rate;
+                costDisplay.classList.remove('hidden');
+            } else {
+                costDisplay.classList.add('hidden');
+            }
+        }
+
+        // Form submission handlers
+        function addCrop(event) {
+            event.preventDefault();
+            alert('Crop added successfully!');
+            event.target.reset();
+            toggleSection('addCrop');
+        }
+
+        function updateHarvest(event) {
+            event.preventDefault();
+            alert('Harvest information updated successfully!');
+            event.target.reset();
+            toggleSection('updateHarvest');
+        }
+
+        function deleteCrop(event) {
+            event.preventDefault();
+            if (confirm('Are you sure you want to delete this crop?')) {
+                alert('Crop deleted successfully!');
+                event.target.reset();
+                toggleSection('deleteCrop');
+            }
+        }
+
+        function logInputUsage(event) {
+            event.preventDefault();
+            alert('Input usage logged successfully!');
+            event.target.reset();
+            toggleSection('inputUsage');
+        }
+
+        function requestStorage(event) {
+            event.preventDefault();
+            alert('Storage request submitted successfully!');
+            event.target.reset();
+            toggleSection('requestStorage');
+        }
+
+        function submitWithdrawal(event) {
+            event.preventDefault();
+            alert('Withdrawal request submitted successfully!');
+            event.target.reset();
+            document.getElementById('costDisplay').classList.add('hidden');
+            toggleSection('withdrawal');
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                alert('Logged out successfully!');
+                // Redirect to login page
+                // window.location.href = 'login.html';
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Sosho Bhander Farmer Dashboard loaded');
+        });
+    </script>
+</body>
+</html>
