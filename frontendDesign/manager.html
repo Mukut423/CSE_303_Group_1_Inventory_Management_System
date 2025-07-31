@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shobji Vhander Inventory System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f9f0;
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: #166534;
+            color: white;
+            padding: 1rem;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-info p {
+            margin: 0;
+        }
+
+        .logout-btn {
+            background-color: #dc2626;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 1rem;
+        }
+
+        .logout-btn:hover {
+            background-color: #b91c1c;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #d1fae5;
+        }
+
+        .dashboard-card {
+            background-color: #dcfce7;
+            text-align: center;
+        }
+
+        .dashboard-card .number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #166534;
+        }
+
+        .dashboard-card .label {
+            font-size: 0.875rem;
+            color: #16a34a;
+        }
+
+        .card-header {
+            background-color: #dcfce7;
+            margin: -1rem -1rem 1rem -1rem;
+            padding: 1rem;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .card-title {
+            color: #166534;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .table th,
+        .table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .table th {
+            background-color: #f9fafb;
+            font-weight: 600;
+        }
+
+        .badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-store {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-withdraw {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-approved {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: #16a34a;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #15803d;
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: #16a34a;
+            border: 1px solid #16a34a;
+        }
+
+        .btn-secondary:hover {
+            background-color: #f0f9f0;
+        }
+
+        .btn-danger {
+            background-color: #dc2626;
+            color: white;
+            padding: 0.25rem 0.5rem;
+        }
+
+        .btn-danger:hover {
+            background-color: #b91c1c;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mb-4 {
+            margin-bottom: 1rem;
+        }
+
+        .mb-6 {
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span>📦</span>
+                <h1>Shobji Vhander Inventory System</h1>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <div class="user-info">
+                    <p><strong>Manager: Md. Rahman Ali</strong></p>
+                    <p>ID: MGR001</p>
+                </div>
+                <button class="logout-btn">Log Out</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Dashboard Cards -->
+        <div class="dashboard-cards mb-6">
+            <div class="card dashboard-card">
+                <div class="number">2,450 kg</div>
+                <div class="label">Monthly Requests</div>
+            </div>
+            <div class="card dashboard-card">
+                <div class="number">18,750 kg</div>
+                <div class="label">Stored Crops</div>
+            </div>
+            <div class="card dashboard-card">
+                <div class="number">25,000 kg</div>
+                <div class="label">Max Capacity</div>
+            </div>
+            <div class="card dashboard-card">
+                <div class="number">6,250 kg</div>
+                <div class="label">Available Space</div>
+            </div>
+            <div class="card dashboard-card">
+                <div class="number">5</div>
+                <div class="label">Houses</div>
+            </div>
+        </div>
+
+        <!-- Requests Table -->
+        <div class="card mb-6">
+            <div class="card-header">
+                <h2 class="card-title">Requests</h2>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Crops</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="requestsTable">
+                    <tr>
+                        <td>F001</td>
+                        <td>Karim Rahman</td>
+                        <td>Tomato</td>
+                        <td>500 kg</td>
+                        <td><span class="badge badge-store">store</span></td>
+                        <td><button class="btn btn-danger" onclick="removeRequest(this)">🗑️</button></td>
+                    </tr>
+                    <tr>
+                        <td>B002</td>
+                        <td>Fatima Begum</td>
+                        <td>Rice</td>
+                        <td>1000 kg</td>
+                        <td><span class="badge badge-withdraw">withdraw</span></td>
+                        <td><button class="btn btn-danger" onclick="removeRequest(this)">🗑️</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="mb-6">
+            <button class="btn btn-primary" onclick="toggleForm('acceptForm')">Accept Store & Withdraw</button>
+            <button class="btn btn-secondary" onclick="toggleForm('searchForm')">Search Product</button>
+        </div>
+
+        <!-- Accept Form -->
+        <div id="acceptForm" class="card mb-6 hidden">
+            <div class="card-header">
+                <h3 class="card-title">Accept Store & Withdraw</h3>
+            </div>
+            <form onsubmit="handleAccept(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Action</label>
+                        <select class="form-select" name="action" required onchange="toggleInventoryField(this.value)">
+                            <option value="">Select action</option>
+                            <option value="store">Store</option>
+                            <option value="withdraw">Withdraw</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Quantity (kg)</label>
+                        <input type="number" class="form-input" name="quantity" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Crops Name</label>
+                        <input type="text" class="form-input" name="cropsName" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Farmer/Buyer ID</label>
+                        <input type="text" class="form-input" name="farmerId" required>
+                    </div>
+                    <div id="inventoryIdField" class="form-group hidden">
+                        <label class="form-label">Inventory ID</label>
+                        <input type="text" class="form-input" name="inventoryId">
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary">Accept</button>
+                    <button type="button" class="btn btn-secondary" onclick="toggleForm('acceptForm')">Cancel</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Search Form -->
+        <div id="searchForm" class="card mb-6 hidden">
+            <div class="card-header">
+                <h3 class="card-title">Search Product</h3>
+            </div>
+            <form onsubmit="handleSearch(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Farmer ID</label>
+                        <input type="text" class="form-input" name="farmerId" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Crops ID</label>
+                        <input type="text" class="form-input" name="cropsId" required>
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    <button type="button" class="btn btn-secondary" onclick="toggleForm('searchForm')">Cancel</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Search Results -->
+        <div id="searchResults" class="card mb-6 hidden">
+            <div class="card-header">
+                <h3 class="card-title">Product Details</h3>
+            </div>
+            <div id="searchResultsContent"></div>
+        </div>
+
+        <!-- Accepted Tables -->
+        <div class="two-column mb-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Accepted Store</h3>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Batch</th>
+                            <th>Farmer ID</th>
+                            <th>Crops</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody id="acceptedStoreTable">
+                        <tr>
+                            <td>B001</td>
+                            <td>F001</td>
+                            <td>Onion</td>
+                            <td>300 kg</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Accepted Withdraw</h3>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Batch</th>
+                            <th>Buyer ID</th>
+                            <th>Crops</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody id="acceptedWithdrawTable">
+                        <tr>
+                            <td>B002</td>
+                            <td>B001</td>
+                            <td>Rice</td>
+                            <td>200 kg</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Owner Request Button -->
+        <div class="text-center mb-6">
+            <button class="btn btn-primary" onclick="toggleForm('ownerForm')">Request to Owner</button>
+        </div>
+
+        <!-- Owner Request Form -->
+        <div id="ownerForm" class="card mb-6 hidden" style="max-width: 600px; margin: 0 auto;">
+            <div class="card-header">
+                <h3 class="card-title">Request to Owner</h3>
+            </div>
+            <form onsubmit="handleOwnerRequest(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Batch Number</label>
+                        <input type="text" class="form-input" name="batchNumber" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Crops ID</label>
+                        <input type="text" class="form-input" name="cropsId" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Crops Name</label>
+                        <input type="text" class="form-input" name="cropsName" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Quantity (kg)</label>
+                        <input type="number" class="form-input" name="quantity" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">House ID</label>
+                        <input type="text" class="form-input" name="houseId" required>
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary">Send Request</button>
+                    <button type="button" class="btn btn-secondary" onclick="toggleForm('ownerForm')">Cancel</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Owner Accepted Table -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Owner Accepted Batches</h3>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Batch</th>
+                        <th>Crops ID</th>
+                        <th>Crops Name</th>
+                        <th>Quantity</th>
+                        <th>House ID</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="ownerAcceptedTable">
+                    <tr>
+                        <td>B001</td>
+                        <td>C001</td>
+                        <td>Onion</td>
+                        <td>300 kg</td>
+                        <td>IH001</td>
+                        <td><span class="badge badge-approved">Approved</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function toggleForm(formId) {
+            const form = document.getElementById(formId);
+            form.classList.toggle('hidden');
+        }
+
+        function toggleInventoryField(action) {
+            const inventoryField = document.getElementById('inventoryIdField');
+            if (action === 'withdraw') {
+                inventoryField.classList.remove('hidden');
+            } else {
+                inventoryField.classList.add('hidden');
+            }
+        }
+
+        function removeRequest(button) {
+            button.closest('tr').remove();
+        }
+
+        function handleAccept(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const action = formData.get('action');
+            const quantity = formData.get('quantity');
+            const cropsName = formData.get('cropsName');
+            const farmerId = formData.get('farmerId');
+
+            const batchNumber = 'B' + Math.floor(Math.random() * 1000);
+            const tableId = action === 'store' ? 'acceptedStoreTable' : 'acceptedWithdrawTable';
+            const table = document.getElementById(tableId);
+
+            const row = table.insertRow();
+            row.innerHTML = `
+                <td>${batchNumber}</td>
+                <td>${farmerId}</td>
+                <td>${cropsName}</td>
+                <td>${quantity} kg</td>
+            `;
+
+            event.target.reset();
+            toggleForm('acceptForm');
+            alert('Request accepted successfully!');
+        }
+
+        function handleSearch(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const farmerId = formData.get('farmerId');
+            const cropsId = formData.get('cropsId');
+
+            const resultsDiv = document.getElementById('searchResults');
+            const contentDiv = document.getElementById('searchResultsContent');
+
+            contentDiv.innerHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1rem;">
+                    <p><strong>Farmer ID:</strong> ${farmerId}</p>
+                    <p><strong>Crops ID:</strong> ${cropsId}</p>
+                    <p><strong>Crops Name:</strong> Tomato</p>
+                    <p><strong>Quality:</strong> Grade A</p>
+                </div>
+            `;
+
+            resultsDiv.classList.remove('hidden');
+            toggleForm('searchForm');
+        }
+
+        function handleOwnerRequest(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const batchNumber = formData.get('batchNumber');
+            const cropsId = formData.get('cropsId');
+            const cropsName = formData.get('cropsName');
+            const quantity = formData.get('quantity');
+            const houseId = formData.get('houseId');
+
+            const table = document.getElementById('ownerAcceptedTable');
+            const row = table.insertRow();
+            row.innerHTML = `
+                <td>${batchNumber}</td>
+                <td>${cropsId}</td>
+                <td>${cropsName}</td>
+                <td>${quantity} kg</td>
+                <td>${houseId}</td>
+                <td><span class="badge badge-pending">Pending</span></td>
+            `;
+
+            event.target.reset();
+            toggleForm('ownerForm');
+            alert('Request sent to owner successfully!');
+        }
+    </script>
+</body>
+</html>
