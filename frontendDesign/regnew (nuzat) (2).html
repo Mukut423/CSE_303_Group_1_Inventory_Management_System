@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shobji Bhandar - Registration</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 50%, #a5d6a7 100%);
+            min-height: 100vh;
+            padding: 21px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            background: linear-gradient(45deg, #2e7d32, #4caf50);
+            color: white;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .main-title {
+            color: #1b5e20;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            color: #2e7d32;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 2px solid #e8f5e8;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #4caf50, #66bb6a);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-info {
+            font-size: 1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-container {
+            margin: 20px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #81c784, #a5d6a7);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            box-shadow: 0 2px 10px rgba(255,255,255,0.3);
+        }
+
+        .card-content {
+            padding: 40px;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e8f5e8;
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #4caf50, #66bb6a);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            color: #1b5e20;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2e7d32;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .required {
+            color: #d32f2f;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #4caf50;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .checkbox-group, .radio-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item, .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .checkbox-item:hover, .radio-item:hover {
+            background: #e8f5e8;
+            border-color: #4caf50;
+        }
+
+        .checkbox-item input, .radio-item input {
+            width: 18px;
+            height: 18px;
+            accent-color: #4caf50;
+        }
+
+        .upload-area {
+            border: 2px dashed #4caf50;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            background: #f1f8e9;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-area:hover {
+            background: #e8f5e8;
+            border-color: #2e7d32;
+        }
+
+        .upload-icon {
+            font-size: 2rem;
+            color: #4caf50;
+            margin-bottom: 10px;
+        }
+
+        .upload-text {
+            color: #2e7d32;
+            font-size: 0.9rem;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e8f5e8;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #4caf50, #66bb6a);
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #4caf50;
+            border: 2px solid #4caf50;
+        }
+
+        .btn-secondary:hover {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .error-message {
+            color: #d32f2f;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .role-specific {
+            background: linear-gradient(135deg, #f1f8e9, #e8f5e8);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            border-left: 4px solid #4caf50;
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-leaf {
+            position: absolute;
+            color: rgba(76, 175, 80, 0.1);
+            font-size: 2rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .floating-leaf:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .floating-leaf:nth-child(2) { top: 20%; right: 10%; animation-delay: 2s; }
+        .floating-leaf:nth-child(3) { bottom: 20%; left: 20%; animation-delay: 4s; }
+        .floating-leaf:nth-child(4) { bottom: 10%; right: 20%; animation-delay: 1s; }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .main-title {
+                font-size: 2rem;
+            }
+            
+            .card-content {
+                padding: 20px;
+            }
+            
+            .checkbox-group, .radio-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <i class="fas fa-leaf floating-leaf"></i>
+        <i class="fas fa-seedling floating-leaf"></i>
+        <i class="fas fa-leaf floating-leaf"></i>
+        <i class="fas fa-apple-alt floating-leaf"></i>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-store"></i>
+            </div>
+            <h1 class="main-title">শবজি ভান্ডার</h1>
+            <h2 class="main-title">Shobji Bhandar</h2>
+            <p class="subtitle">Inventory Management System Registration</p>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Create Your Account</h2>
+                <p class="step-info">Step <span id="currentStep">1</span> of 3: <span id="stepTitle">Basic Information</span></p>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 33.33%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-content">
+                <form id="registrationForm">
+                    <!-- Step 1: Basic Information -->
+                    <div class="form-section active" id="step1">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <h3 class="section-title">Basic Information</h3>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="name">Full Name <span class="required">*</span></label>
+                            <input type="text" id="name" class="form-input" placeholder="Enter your full name" required>
+                            <div class="error-message" id="nameError">Please enter your full name</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="location">Location <span class="required">*</span></label>
+                            <input type="text" id="location" class="form-input" placeholder="District, Village, or Warehouse Address" required>
+                            <div class="error-message" id="locationError">Please enter your location</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="userRole">User Role <span class="required">*</span></label>
+                            <select id="userRole" class="form-select" required>
+                                <option value="">Select your role</option>
+                                <option value="farmer">🌾 Farmer</option>
+                                <option value="agronomist">🔬 Agronomist</option>
+                                <option value="distributor">🚚 Distributor/Supplier</option>
+                                <option value="inventory-manager">📦 Inventory Manager</option>
+                                <option value="inventory-owner">🏢 Inventory Owner</option>
+                                <option value="buyer">🛒 Buyer</option>
+                            </select>
+                            <div class="error-message" id="userRoleError">Please select your role</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="contact">Contact Number <span class="required">*</span></label>
+                            <input type="tel" id="contact" class="form-input" placeholder="Enter your contact number" required>
+                            <div class="error-message" id="contactError">Please enter a valid contact number</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="email">Email Address <span class="required">*</span></label>
+                            <input type="email" id="email" class="form-input" placeholder="Enter your email address" required>
+                            <div class="error-message" id="emailError">Please enter a valid email address</div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Role-specific fields -->
+                    <div class="form-section" id="step2">
+                        <div id="roleSpecificContent"></div>
+                    </div>
+
+                    <!-- Step 3: Password -->
+                    <div class="form-section" id="step3">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <h3 class="section-title">Security Setup</h3>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="password">Password <span class="required">*</span></label>
+                            <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
+                            <div class="error-message" id="passwordError">Password must be at least 6 characters</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="confirmPassword">Confirm Password <span class="required">*</span></label>
+                            <input type="password" id="confirmPassword" class="form-input" placeholder="Confirm your password" required>
+                            <div class="error-message" id="confirmPasswordError">Passwords do not match</div>
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" id="prevBtn" class="btn btn-secondary" style="display: none;">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </button>
+                        <button type="button" id="nextBtn" class="btn btn-primary">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button type="submit" id="submitBtn" class="btn btn-primary" style="display: none;">
+                            <i class="fas fa-check-circle"></i> Complete Registration
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 3;
+        let formData = {};
+
+        // Role-specific field templates
+        const roleFields = {
+            farmer: `
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3 class="section-title">Farmer Details</h3>
+                </div>
+                <div class="role-specific">
+                    <div class="form-group">
+                        <label class="form-label">Type of Crops Grown <span class="required">*</span></label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="rice" name="cropsGrown" value="Rice">
+                                <label for="rice">🌾 Rice</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="wheat" name="cropsGrown" value="Wheat">
+                                <label for="wheat">🌾 Wheat</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="corn" name="cropsGrown" value="Corn">
+                                <label for="corn">🌽 Corn</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="vegetables" name="cropsGrown" value="Vegetables">
+                                <label for="vegetables">🥬 Vegetables</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="fruits" name="cropsGrown" value="Fruits">
+                                <label for="fruits">🍎 Fruits</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="pulses" name="cropsGrown" value="Pulses">
+                                <label for="pulses">🫘 Pulses</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="farmSize">Farm Size (in acres/hectares) <span class="required">*</span></label>
+                        <input type="text" id="farmSize" class="form-input" placeholder="e.g., 5 acres" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="farmingExperience">Farming Experience (in years) <span class="required">*</span></label>
+                        <input type="number" id="farmingExperience" class="form-input" placeholder="e.g., 10" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Preferred Storage Method <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" id="openStorage" name="storageMethod" value="open" required>
+                                <label for="openStorage">🏠 Open Storage</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="coldStorage" name="storageMethod" value="cold" required>
+                                <label for="coldStorage">❄️ Cold Storage</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="dryStorage" name="storageMethod" value="dry" required>
+                                <label for="dryStorage">🌵 Dry Storage</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            agronomist: `
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-microscope"></i>
+                    </div>
+                    <h3 class="section-title">Agronomist Details</h3>
+                </div>
+                <div class="role-specific">
+                    <div class="form-group">
+                        <label class="form-label" for="expertise">Area of Expertise <span class="required">*</span></label>
+                        <input type="text" id="expertise" class="form-input" placeholder="e.g., soil management, pest control, organic farming" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="certification">Certification or License ID</label>
+                        <input type="text" id="certification" class="form-input" placeholder="Enter certification ID (optional)">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="yearsExperience">Years of Experience <span class="required">*</span></label>
+                        <input type="number" id="yearsExperience" class="form-input" placeholder="e.g., 8" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="organization">Affiliated Organization</label>
+                        <input type="text" id="organization" class="form-input" placeholder="Enter organization name (optional)">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Upload Resume/License (Optional)</label>
+                        <div class="upload-area">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="upload-text">Click to upload or drag and drop</div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            'inventory-manager': `
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                    <h3 class="section-title">Inventory Manager Details</h3>
+                </div>
+                <div class="role-specific">
+                    <div class="form-group">
+                        <label class="form-label" for="warehouse">Assigned Warehouse or Inventory Location <span class="required">*</span></label>
+                        <input type="text" id="warehouse" class="form-input" placeholder="Enter warehouse location" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="invExperience">Inventory Experience (in years) <span class="required">*</span></label>
+                        <input type="number" id="invExperience" class="form-input" placeholder="e.g., 5" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="managerId">Manager ID or Reference Code</label>
+                        <input type="text" id="managerId" class="form-input" placeholder="Enter manager ID (optional)">
+                    </div>
+                </div>
+            `,
+            'inventory-owner': `
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-warehouse"></i>
+                    </div>
+                    <h3 class="section-title">Inventory Owner Details</h3>
+                </div>
+                <div class="role-specific">
+                    <div class="form-group">
+                        <label class="form-label" for="businessName">Business Name <span class="required">*</span></label>
+                        <input type="text" id="businessName" class="form-input" placeholder="Enter business name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="warehouseAddress">Inventory/Warehouse Address <span class="required">*</span></label>
+                        <textarea id="warehouseAddress" class="form-textarea" placeholder="Enter complete warehouse address" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Type of Storage Facility <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" id="coldFacility" name="storageType" value="cold" required>
+                                <label for="coldFacility">❄️ Cold Storage</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="dryFacility" name="storageType" value="dry" required>
+                                <label for="dryFacility">🌵 Dry Storage</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="hybridFacility" name="storageType" value="hybrid" required>
+                                <label for="hybridFacility">🔄 Hybrid Storage</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="gstNumber">GST or Trade License Number</label>
+                        <input type="text" id="gstNumber" class="form-input" placeholder="Enter GST/Trade License number (optional)">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ownership Document Upload (Optional)</label>
+                        <div class="upload-area">
+                            <div class="upload-icon">
+                                <i class="fas fa-file-upload"></i>
+                            </div>
+                            <div class="upload-text">Click to upload ownership documents</div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            distributor: `
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h3 class="section-title">Distributor/Supplier Details</h3>
+                </div>
+                <div class="role-specific">
+                    <div class="form-group">
+                        <label class="form-label">Type of Supplies Provided <span class="required">*</span></label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="seeds" name="suppliesProvided" value="Seeds">
+                                <label for="seeds">🌱 Seeds</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="packaging" name="suppliesProvided" value="Packaging">
+                                <label for="packaging">📦 Packaging</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="fertilizers" name="suppliesProvided" value="Fertilizers">
+                                <label for="fertilizers">🧪 Fertilizers</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="pesticides" name="suppliesProvided" value="Pesticides">
+                                <label for="pesticides">🚫 Pesticides</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="tools" name="suppliesProvided" value="Tools">
+                                <label for="tools">🔧 Tools</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="equipment" name="suppliesProvided" value="Equipment">
+                                <label for="equipment">⚙️ Equipment</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="companyName">Business/Company Name <span class="required">*</span></label>
+                        <input type="text" id="companyName" class="form-input" placeholder="Enter company name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="tradeLicense">Trade License Number</label>
+                        <input type="text" id="tradeLicense" class="form-input" placeholder="Enter trade license number (optional)">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="supplyCapacity">Supply Capacity Per Month <span class="required">*</span></label>
+                        <input type="text" id="supplyCapacity" class="form-input" placeholder="e.g., 1000 units" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="deliveryRegions">Delivery Regions <span class="required">*</span></label>
+                        <textarea id="deliveryRegions" class="form-textarea" placeholder="Enter regions you can deliver to" required></textarea>
+                    </div>
+                </div>
+            `,
+            buyer: `
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <h3 class="section-title">Buyer Details</h3>
+                </div>
+                <div class="role-specific">
+                    <div class="form-group">
+                        <label class="form-label">Type of Buyer <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" id="individual" name="buyerType" value="individual" required>
+                                <label for="individual">👤 Individual</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="retailer" name="buyerType" value="retailer" required>
+                                <label for="retailer">🏪 Retailer</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="wholesaler" name="buyerType" value="wholesaler" required>
+                                <label for="wholesaler">🏢 Wholesaler</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Product Interests <span class="required">*</span></label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="grains" name="productInterests" value="Grains">
+                                <label for="grains">🌾 Grains</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="fruitsInterest" name="productInterests" value="Fruits">
+                                <label for="fruitsInterest">🍎 Fruits</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="vegetablesInterest" name="productInterests" value="Vegetables">
+                                <label for="vegetablesInterest">🥬 Vegetables</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="pulsesInterest" name="productInterests" value="Pulses">
+                                <label for="pulsesInterest">🫘 Pulses</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="spices" name="productInterests" value="Spices">
+                                <label for="spices">🌶️ Spices</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="dairy" name="productInterests" value="Dairy">
+                                <label for="dairy">🥛 Dairy</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="purchaseCapacity">Purchase Capacity (monthly estimate) <span class="required">*</span></label>
+                        <input type="text" id="purchaseCapacity" class="form-input" placeholder="e.g., 500 kg per month" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Delivery Preference <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" id="pickup" name="deliveryPreference" value="pickup" required>
+                                <label for="pickup">🚗 Pickup</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="delivery" name="deliveryPreference" value="delivery" required>
+                                <label for="delivery">🚚 Delivery</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `
+        };
+
+        // Initialize form
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStepDisplay();
+            
+            // Event listeners
+            document.getElementById('nextBtn').addEventListener('click', nextStep);
+            document.getElementById('prevBtn').addEventListener('click', prevStep);
+            document.getElementById('registrationForm').addEventListener('submit', handleSubmit);
+            document.getElementById('userRole').addEventListener('change', handleRoleChange);
+            
+            // Real-time validation
+            document.getElementById('confirmPassword').addEventListener('input', validatePasswordMatch);
+        });
+
+        function updateStepDisplay() {
+            document.getElementById('currentStep').textContent = currentStep;
+            document.getElementById('progressFill').style.width = `${(currentStep / totalSteps) * 100}%`;
+            
+            const stepTitles = ['Basic Information', 'Role-Specific Details', 'Security Setup'];
+            document.getElementById('stepTitle').textContent = stepTitles[currentStep - 1];
+            
+            // Show/hide sections
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            
+            // Show/hide buttons
+            document.getElementById('prevBtn').style.display = currentStep > 1 ? 'flex' : 'none';
+            document.getElementById('nextBtn').style.display = currentStep < totalSteps ? 'flex' : 'none';
+            document.getElementById('submitBtn').style.display = currentStep === totalSteps ? 'flex' : 'none';
+        }
+
+        function nextStep() {
+            if (validateCurrentStep()) {
+                currentStep++;
+                updateStepDisplay();
+            }
+        }
+
+        function prevStep() {
+            currentStep--;
+            updateStepDisplay();
+        }
+
+        function validateCurrentStep() {
+            if (currentStep === 1) {
+                return validateBasicInfo();
+            } else if (currentStep === 2) {
+                return validateRoleSpecific();
+            }
+            return true;
+        }
+
+        function validateBasicInfo() {
+            const fields = ['name', 'location', 'userRole', 'contact', 'email'];
+            let isValid = true;
+            
+            fields.forEach(field => {
+                const input = document.getElementById(field);
+                const error = document.getElementById(field + 'Error');
+                
+                if (!input.value.trim()) {
+                    error.style.display = 'block';
+                    input.style.borderColor = '#d32f2f';
+                    isValid = false;
+                } else {
+                    error.style.display = 'none';
+                    input.style.borderColor = '#4caf50';
+                }
+            });
+            
+            return isValid;
+        }
+
+        function validateRoleSpecific() {
+            const userRole = document.getElementById('userRole').value;
+            if (!userRole) return false;
+            
+            // Basic validation for role-specific fields
+            const requiredFields = document.querySelectorAll('#step2 [required]');
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (field.type === 'checkbox' || field.type === 'radio') {
+                    const name = field.name;
+                    const checked = document.querySelectorAll(`[name="${name}"]:checked`);
+                    if (checked.length === 0) {
+                        isValid = false;
+                    }
+                } else if (!field.value.trim()) {
+                    isValid = false;
+                }
+            });
+            
+            return isValid;
+        }
+
+        function validatePasswordMatch() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const error = document.getElementById('confirmPasswordError');
+            
+            if (confirmPassword && password !== confirmPassword) {
+                error.style.display = 'block';
+                document.getElementById('confirmPassword').style.borderColor = '#d32f2f';
+                return false;
+            } else {
+                error.style.display = 'none';
+                document.getElementById('confirmPassword').style.borderColor = '#4caf50';
+                return true;
+            }
+        }
+
+        function handleRoleChange() {
+            const userRole = document.getElementById('userRole').value;
+            const roleContent = document.getElementById('roleSpecificContent');
+            
+            if (userRole && roleFields[userRole]) {
+                roleContent.innerHTML = roleFields[userRole];
+            } else {
+                roleContent.innerHTML = '';
+            }
+        }
+
+        function handleSubmit(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password.length < 6) {
+                document.getElementById('passwordError').style.display = 'block';
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                document.getElementById('confirmPasswordError').style.display = 'block';
+                return;
+            }
+            
+            // Collect all form data
+            const formData = new FormData(document.getElementById('registrationForm'));
+            const data = {};
+            
+            for (let [key, value] of formData.entries()) {
+                if (data[key]) {
+                    if (Array.isArray(data[key])) {
+                        data[key].push(value);
+                    } else {
+                        data[key] = [data[key], value];
+                    }
+                } else {
+                    data[key] = value;
+                }
+            }
+            
+            console.log('Registration Data:', data);
+            
+            // Show success message
+            alert('🎉 Registration successful! Welcome to Shobji Bhandar!');
+            
+            // Here you would typically send the data to your server
+            // fetch('/api/register', { method: 'POST', body: JSON.stringify(data) })
+        }
+    </script>
+</body>
+</html>
