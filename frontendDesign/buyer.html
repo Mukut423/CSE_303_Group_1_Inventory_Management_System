@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shobji Bhander - Buyer Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+<style>
+    .hidden { display: none; }
+    .table-container { overflow-x: auto; }
+</style>
+</head>
+<body class="min-h-screen bg-gray-50">
+    <!-- Header Section -->
+    <div class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold text-green-700">Shobji Bhander</h1>
+                    <p class="text-sm text-gray-600">Inventory Management System</p>
+                </div>
+                <div class="flex items-center gap-6">
+                    <div class="text-right">
+                        <p class="text-sm font-medium">Buyer ID: BYR001</p>
+                        <p class="text-sm text-gray-600">John Doe</p>
+                        <p class="text-sm text-gray-600">+880 1234567890</p>
+                    </div>
+                    <button class="btn-secondary">
+                        <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                        </svg>
+                        <a href="login.html" class="btn btn-primary btn-lg mt-4">Logout</a>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 py-6 space-y-6">
+        <!-- Overview Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-lg font-semibold">Total Crops Stored</h3>
+                </div>
+                <div class="card-content">
+                    <div class="text-3xl font-bold text-green-600">1,550</div>
+                    <p class="text-sm text-gray-600">Total units in inventory</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-lg font-semibold">Storage Overview</h3>
+                </div>
+                <div class="card-content">
+                    <div class="text-3xl font-bold text-blue-600">3</div>
+                    <p class="text-sm text-gray-600">Different crop types stored</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons Section -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Crop Details Button -->
+            <div class="card cursor-pointer hover:shadow-lg transition-shadow" onclick="toggleSection('cropDetails')">
+                <div class="card-content flex flex-col items-center justify-center p-6">
+                    <svg class="w-12 h-12 text-green-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                    </svg>
+                    <h3 class="font-semibold text-center">Crop Details Received from Farmer</h3>
+                </div>
+            </div>
+
+            <!-- Packaging Details Button -->
+            <div class="card cursor-pointer hover:shadow-lg transition-shadow" onclick="toggleSection('packagingDetails')">
+                <div class="card-content flex flex-col items-center justify-center p-6">
+                    <svg class="w-12 h-12 text-blue-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                    </svg>
+                    <h3 class="font-semibold text-center">Product Packaging Details</h3>
+                </div>
+            </div>
+
+            <!-- Storage Request Button -->
+            <div class="card cursor-pointer hover:shadow-lg transition-shadow" onclick="toggleSection('storageRequest')">
+                <div class="card-content flex flex-col items-center justify-center p-6">
+                    <svg class="w-12 h-12 text-purple-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                    </svg>
+                    <h3 class="font-semibold text-center">Request Inventory Storage</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Crop Details Form -->
+        <div id="cropDetails" class="card hidden">
+            <div class="card-header">
+                <h3 class="text-lg font-semibold">Crop Details from Farmer</h3>
+                <p class="text-sm text-gray-600">Enter the crop information received from the farmer</p>
+            </div>
+            <div class="card-content">
+                <form class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label class="block text-sm font-medium text-gray-700">Crop Name</label>
+                            <input type="text" class="form-input" placeholder="Enter crop name (e.g., Rice, Wheat, Corn)">
+                        </div>
+                        <div class="form-group">
+                            <label class="block text-sm font-medium text-gray-700">Seed Type</label>
+                            <select class="form-select">
+                                <option value="">Select seed type</option>
+                                <option value="hybrid">Hybrid</option>
+                                <option value="organic">Organic</option>
+                                <option value="gmo">GMO</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="block text-sm font-medium text-gray-700">Harvest Date</label>
+                            <input type="date" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="block text-sm font-medium text-gray-700">Unit</label>
+                            <select class="form-select">
+                                <option value="">Select unit</option>
+                                <option value="kg">Kilograms</option>
+                                <option value="tons">Tons</option>
+                                <option value="quintals">Quintals</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="block text-sm font-medium text-gray-700">Quantity</label>
+                            <input type="number" class="form-input" placeholder="Enter quantity">
+                        </div>
+                        <div class="form-group">
+                            <label class="block text-sm font-medium text-gray-700">Crop Type</label>
+                            <div class="flex gap-4 mt-2">
+                                <label class="flex items-center">
+                                    <input type="radio" name="cropType" value="perishable" class="mr-2">
+                                    Perishable
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="cropType" value="non-perishable" class="mr-2">
+                                    Non-Perishable
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-end gap-2">
+                        <button type="button" class="btn-secondary" onclick="toggleSection('cropDetails')">Cancel</button>
+                        <button type="submit" class="btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Packaging Details Form -->
+        <div id="packagingDetails" class="card hidden">
+            <div class="card-header">
+                <h3 class="text-lg font-semibold">Product Packaging Details</h3>
+                <p class="text-sm text-gray-600">Enter packaging and product information</p>
+            </div>
+            <div class="card-content">
+                <form class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label class="block text-sm font-medium text-gray-700">Crops Name</label>
+                            <input type="text" class="form-input" placeholder="Enter crop name">
+                        </div>
+                        <div class="form-group">
+                            <label class="block text-sm font-medium text-gray-700">Harvested Date</label>
+                            <input type="date" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="block text-sm font-medium text-gray-700">Packaging Date</label>
+                            <input type="date" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="block text-sm font-medium text-gray-700">Expire Date</label>
+                            <input type="date" class="form-input">
+                        </div>
+                    </div>
+                    <div class="flex justify-end gap-2">
+                        <button type="button" class="btn-secondary" onclick="toggleSection('packagingDetails')">Cancel</button>
+                        <button type="submit" class="btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Storage Request Form -->
+        <div id="storageRequest" class="card hidden">
+            <div class="card-header">
+                <h3 class="text-lg font-semibold">Request Inventory Storage</h3>
+                <p class="text-sm text-gray-600">Specify storage requirements for your crops</p>
+            </div>
+            <div class="card-content">
+                <form class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label class="block text-sm font-medium text-gray-700">Crop Name</label>
+                            <input type="text" class="form-input" placeholder="Enter crop name">
+                        </div>
+                        <div class="form-group">
+                            <label class="block text-sm font-medium text-gray-700">Quantity to Store</label>
+                            <input type="number" class="form-input" placeholder="Enter quantity">
+                        </div>
+                        <div class="form-group">
+                            <label class="block text-sm font-medium text-gray-700">Unit</label>
+                            <select class="form-select">
+                                <option value="">Select unit</option>
+                                <option value="kg">Kilograms</option>
+                                <option value="tons">Tons</option>
+                                <option value="quintals">Quintals</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="block text-sm font-medium text-gray-700">Storage Requirements (Optional)</label>
+                        <textarea class="form-input" rows="3" placeholder="Enter specific storage requirements..."></textarea>
+                    </div>
+                    <div class="flex justify-end gap-2">
+                        <button type="button" class="btn-secondary" onclick="toggleSection('storageRequest')">Cancel</button>
+                        <button type="submit" class="btn-primary">Submit Request</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Stored Crops Overview -->
+        <div class="card">
+            <div class="card-header">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="text-lg font-semibold">Stored Crops Overview</h3>
+                        <p class="text-sm text-gray-600">View all crops currently stored in inventory</p>
+                    </div>
+                    <button class="btn-primary" onclick="toggleModal('withdrawalModal')">
+                        <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                        </svg>
+                        Withdrawal
+                    </button>
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="table-container">
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="border-b">
+                                <th class="text-left p-3 font-medium">Batch Number</th>
+                                <th class="text-left p-3 font-medium">Crop Name</th>
+                                <th class="text-left p-3 font-medium">Stored Date</th>
+                                <th class="text-left p-3 font-medium">Expire Date</th>
+                                <th class="text-left p-3 font-medium">Days Left</th>
+                                <th class="text-left p-3 font-medium">Quantity</th>
+                                <th class="text-left p-3 font-medium">Rate/kg</th>
+                                <th class="text-left p-3 font-medium">Total Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="p-3 font-medium">SB001</td>
+                                <td class="p-3">Rice</td>
+                                <td class="p-3">2024-01-15</td>
+                                <td class="p-3">2024-06-15</td>
+                                <td class="p-3 text-yellow-600">45 days</td>
+                                <td class="p-3">500 kg</td>
+                                <td class="p-3">৳25</td>
+                                <td class="p-3">৳12500</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-3 font-medium">SB002</td>
+                                <td class="p-3">Wheat</td>
+                                <td class="p-3">2024-01-20</td>
+                                <td class="p-3">2024-07-20</td>
+                                <td class="p-3 text-green-600">80 days</td>
+                                <td class="p-3">750 kg</td>
+                                <td class="p-3">৳30</td>
+                                <td class="p-3">৳22500</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-3 font-medium">SB003</td>
+                                <td class="p-3">Corn</td>
+                                <td class="p-3">2024-02-01</td>
+                                <td class="p-3">2024-05-01</td>
+                                <td class="p-3 text-red-600">15 days</td>
+                                <td class="p-3">300 kg</td>
+                                <td class="p-3">৳35</td>
+                                <td class="p-3">৳10500</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alert Section -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-lg font-semibold">Alerts & Notifications</h3>
+                <p class="text-sm text-gray-600">Approval and rejection information from inventory manager</p>
+            </div>
+            <div class="card-content">
+                <div id="alertContainer" class="space-y-3">
+                    <!-- Alerts will be dynamically rendered here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdrawal Modal -->
+    <div id="withdrawalModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+            <div class="mb-4">
+                <h3 class="text-lg font-semibold">Withdrawal Request</h3>
+                <p class="text-sm text-gray-600">Select crop and quantity for withdrawal</p>
+            </div>
+            <form class="space-y-4">
+                <div class="form-group">
+                    <label class="block text-sm font-medium text-gray-700">Select Crop</label>
+                    <select class="form-select">
+                        <option value="">Select crop to withdraw</option>
+                        <option value="SB001">Rice (Batch: SB001) - 500kg available</option>
+                        <option value="SB002">Wheat (Batch: SB002) - 750kg available</option>
+                        <option value="SB003">Corn (Batch: SB003) - 300kg available</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="block text-sm font-medium text-gray-700">Quantity</label>
+                    <input type="number" class="form-input" placeholder="Enter withdrawal quantity">
+                </div>
+                <div class="flex justify-end gap-2">
+                    <button type="button" class="btn-secondary" onclick="toggleModal('withdrawalModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Submit Request</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Alert management
+        let alerts = [
+            { id: 1, type: "approved", message: "Storage request for Batch SB004 has been approved", time: "2 hours ago" },
+            { id: 2, type: "rejected", message: "Packaging details for Batch SB005 rejected - incomplete information", time: "1 day ago" },
+            { id: 3, type: "approved", message: "Withdrawal request for 100kg Rice approved", time: "3 days ago" }
+        ];
+        let alertIdCounter = 4;
+
+        function addAlert(type, message) {
+            const newAlert = {
+                id: alertIdCounter++,
+                type: type,
+                message: message,
+                time: "Just now"
+            };
+            
+            // Add new alert to the beginning
+            alerts.unshift(newAlert);
+            
+            // Keep only the latest 5 alerts
+            if (alerts.length > 5) {
+                alerts = alerts.slice(0, 5);
+            }
+            
+            renderAlerts();
+        }
+
+        function renderAlerts() {
+            const alertContainer = document.getElementById('alertContainer');
+            alertContainer.innerHTML = '';
+            
+            alerts.forEach(alert => {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = alert.type === 'approved' ? 'alert-success flex justify-between items-center' : 'alert-error flex justify-between items-center';
+                
+                const iconSvg = alert.type === 'approved' 
+                    ? '<svg class="w-4 h-4 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>'
+                    : '<svg class="w-4 h-4 mr-2 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
+                
+                alertDiv.innerHTML = `
+                    <div class="flex items-center">
+                        ${iconSvg}
+                        <span>${alert.message}</span>
+                    </div>
+                    <span class="text-sm text-gray-500">${alert.time}</span>
+                `;
+                
+                alertContainer.appendChild(alertDiv);
+            });
+        }
+
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const allSections = ['cropDetails', 'packagingDetails', 'storageRequest'];
+            
+            // Hide all other sections
+            allSections.forEach(id => {
+                if (id !== sectionId) {
+                    document.getElementById(id).classList.add('hidden');
+                }
+            });
+            
+            // Toggle current section
+            section.classList.toggle('hidden');
+        }
+
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.toggle('hidden');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('withdrawalModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+            }
+        });
+
+        // Form submission handlers
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Determine form type and add appropriate alert
+                const parentCard = this.closest('.card');
+                const parentModal = this.closest('.fixed');
+                
+                if (parentCard) {
+                    if (parentCard.id === 'cropDetails') {
+                        addAlert('approved', 'Crop details submitted successfully and sent for review');
+                    } else if (parentCard.id === 'packagingDetails') {
+                        addAlert('approved', 'Packaging details submitted successfully');
+                    } else if (parentCard.id === 'storageRequest') {
+                        addAlert('approved', 'Storage request submitted and pending approval');
+                    }
+                    parentCard.classList.add('hidden');
+                }
+                
+                if (parentModal) {
+                    addAlert('approved', 'Withdrawal request submitted successfully');
+                    parentModal.classList.add('hidden');
+                }
+            });
+        });
+
+        // Initialize alerts on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            renderAlerts();
+        });
+
+        // Simulate receiving new alerts (for demonstration)
+        function simulateNewAlert() {
+            const alertTypes = ['approved', 'rejected'];
+            const messages = [
+                'New batch SB006 storage approved',
+                'Quality check failed for batch SB007',
+                'Packaging update request approved',
+                'Storage capacity limit reached',
+                'Withdrawal request processed'
+            ];
+            
+            const randomType = alertTypes[Math.floor(Math.random() * alertTypes.length)];
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            
+            addAlert(randomType, randomMessage);
+        }
+
+        // Add a button to simulate new alerts (for testing)
+        // Uncomment the next line to add a test button
+        // setTimeout(() => { document.body.insertAdjacentHTML('beforeend', '<button onclick="simulateNewAlert()" style="position: fixed; bottom: 20px; right: 20px; background: #3b82f6; color: white; padding: 10px; border: none; border-radius: 5px;">Add Test Alert</button>'); }, 1000);
+    </script>
+</body>
+</html>
