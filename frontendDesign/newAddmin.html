@@ -1,0 +1,2566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shobji Vhander - Inventory Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9fafb;
+            color: #374151;
+        }
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 260px;
+            background: white;
+            border-right: 1px solid #e5e7eb;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: #16a34a;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .logo-text h2 {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .nav-menu {
+            padding: 20px;
+        }
+
+        .nav-item {
+            margin-bottom: 8px;
+        }
+
+        .nav-button {
+            width: 100%;
+            padding: 12px 16px;
+            background: none;
+            border: none;
+            border-radius: 8px;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #374151;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .nav-button:hover {
+            background: #f3f4f6;
+        }
+
+        .nav-button.active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .dropdown-menu {
+            margin-left: 32px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 8px 16px;
+            margin-bottom: 4px;
+            background: none;
+            border: none;
+            border-radius: 6px;
+            text-align: left;
+            cursor: pointer;
+            width: 100%;
+            color: #6b7280;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background: #f3f4f6;
+        }
+
+        .dropdown-item.active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+        }
+
+        .header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .header-left p {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+
+        .user-icon {
+            width: 20px;
+            height: 20px;
+            color: #6b7280;
+        }
+
+        .user-details {
+            font-size: 14px;
+        }
+
+        .user-name {
+            font-weight: 500;
+            color: #1f2937;
+        }
+
+        .user-id {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .logout-btn {
+            padding: 8px 12px;
+            background: none;
+            border: none;
+            color: #dc2626;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #fef2f2;
+        }
+
+        .content {
+            padding: 24px;
+        }
+
+        .page-header {
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: #6b7280;
+        }
+
+        /* Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .card-icon {
+            width: 32px;
+            height: 32px;
+            color: #16a34a;
+        }
+
+        .card-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        /* Tables */
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .table-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .table-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            padding: 8px 12px 8px 36px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            width: 250px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #16a34a;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            color: #9ca3af;
+        }
+
+        .add-btn {
+            padding: 8px 16px;
+            background: #16a34a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .add-btn:hover {
+            background: #15803d;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th {
+            background: #f9fafb;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+            font-size: 14px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .table tr:hover {
+            background: #f9fafb;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            padding: 4px 8px;
+            border: 1px solid #d1d5db;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: #f3f4f6;
+        }
+
+        .action-btn.delete:hover {
+            background: #fef2f2;
+            border-color: #fca5a5;
+            color: #dc2626;
+        }
+
+        .action-icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Progress bars */
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #e5e7eb;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #16a34a;
+            transition: width 0.3s ease;
+        }
+
+        .progress-fill.warning {
+            background: #f59e0b;
+        }
+
+        .progress-fill.danger {
+            background: #ef4444;
+        }
+
+        /* Status badges */
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-fresh {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-critical {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-good {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        /* Charts */
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .chart-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 16px;
+        }
+
+        .chart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .chart-item:last-child {
+            border-bottom: none;
+        }
+
+        .chart-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chart-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .chart-value {
+            text-align: right;
+        }
+
+        .chart-amount {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .chart-percentage {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* Progress bar in table */
+        .table-progress-bar {
+            width: 100px;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .table-progress-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .table-progress-fill.normal {
+            background: #16a34a;
+        }
+
+        .table-progress-fill.warning {
+            background: #f59e0b;
+        }
+
+        .table-progress-fill.danger {
+            background: #ef4444;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+        }
+
+        .close-btn:hover {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #16a34a;
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            transition: border-color 0.2s;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: #16a34a;
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 80px;
+            transition: border-color 0.2s;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: #16a34a;
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .btn-primary {
+            padding: 8px 16px;
+            background: #16a34a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #15803d;
+        }
+
+        .btn-secondary {
+            padding: 8px 16px;
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .table-controls {
+                justify-content: space-between;
+            }
+
+            .search-input {
+                width: 200px;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 20px;
+            }
+
+            .table-progress-bar {
+                width: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">🌱</div>
+                    <div class="logo-text">
+                        <h2>Shobji Vhander</h2>
+                        <p>Inventory System</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <button class="nav-button active" onclick="showPage('home')">
+                        <span class="nav-icon">🏠</span>
+                        Home
+                    </button>
+                </div>
+
+                <div class="nav-item">
+                    <button class="nav-button" onclick="showPage('agricultural-product')">
+                        <span class="nav-icon">🌾</span>
+                        Agricultural Product
+                    </button>
+                </div>
+
+                <div class="nav-item">
+                    <button class="nav-button" onclick="toggleDropdown('surveillance')">
+                        <span class="nav-icon">👁️</span>
+                        Surveillance
+                        <span style="margin-left: auto;">▼</span>
+                    </button>
+                    <div class="dropdown-menu" id="surveillance-dropdown">
+                        <button class="dropdown-item" onclick="showPage('harvested-crops')">Harvested Crops</button>
+                        <button class="dropdown-item" onclick="showPage('inventory-pad')">InventoryPad</button>
+                        <button class="dropdown-item" onclick="showPage('post-harvested-crops')">Post Harvested Crops</button>
+                        <button class="dropdown-item" onclick="showPage('top-fefo')">Top FEFO Product</button>
+                        <button class="dropdown-item" onclick="showPage('top-fifo')">Top FIFO Product</button>
+                    </div>
+                </div>
+
+                <div class="nav-item">
+                    <button class="nav-button" onclick="showPage('perishable-product')">
+                        <span class="nav-icon">📦</span>
+                        Perishable Product
+                    </button>
+                </div>
+
+                <div class="nav-item">
+                    <button class="nav-button" onclick="showPage('storage-condition')">
+                        <span class="nav-icon">🌡️</span>
+                        Storage Condition
+                    </button>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <h1>Shobji Vhander</h1>
+                    <p>Inventory Management System</p>
+                </div>
+                <div class="header-right">
+                    <div class="user-info">
+                        <span class="user-icon">👤</span>
+                        <div class="user-details">
+                            <div class="user-name">Admin User</div>
+                            <div class="user-id">ID: ADM001</div>
+                        </div>
+                    </div>
+                    <button class="logout-btn" onclick="logout()">
+                        <span>🚪</span>
+                        Logout
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content">
+                <!-- Home Page -->
+                <div id="home-page" class="page">
+                    <div class="page-header">
+                        <h2 class="page-title">Dashboard Overview</h2>
+                        <p class="page-subtitle">Welcome to Shobji Vhander Inventory Management System</p>
+                    </div>
+
+                    <!-- Summary Cards -->
+                    <div class="card-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="card-title">Total Inventory</span>
+                                <span class="card-icon">📦</span>
+                            </div>
+                            <div class="card-value">2,450 tons</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="card-title">Total Products</span>
+                                <span class="card-icon">🏪</span>
+                            </div>
+                            <div class="card-value">156 varieties</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="card-title">Total Capacity</span>
+                                <span class="card-icon">📈</span>
+                            </div>
+                            <div class="card-value">5,000 tons</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="card-title">Total Farmers</span>
+                                <span class="card-icon">👥</span>
+                            </div>
+                            <div class="card-value">1,247</div>
+                        </div>
+                    </div>
+
+                    <!-- Charts -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px;">
+                        <div class="chart-container">
+                            <h3 class="chart-title">Most Stored Crops</h3>
+                            <div class="chart-item">
+                                <div class="chart-label">
+                                    <div class="chart-color" style="background: #16a34a;"></div>
+                                    <span>Rice</span>
+                                </div>
+                                <div class="chart-value">
+                                    <div class="chart-amount">450 tons</div>
+                                    <div class="chart-percentage">18.4%</div>
+                                </div>
+                            </div>
+                            <div class="chart-item">
+                                <div class="chart-label">
+                                    <div class="chart-color" style="background: #059669;"></div>
+                                    <span>Wheat</span>
+                                </div>
+                                <div class="chart-value">
+                                    <div class="chart-amount">380 tons</div>
+                                    <div class="chart-percentage">15.5%</div>
+                                </div>
+                            </div>
+                            <div class="chart-item">
+                                <div class="chart-label">
+                                    <div class="chart-color" style="background: #047857;"></div>
+                                    <span>Potato</span>
+                                </div>
+                                <div class="chart-value">
+                                    <div class="chart-amount">320 tons</div>
+                                    <div class="chart-percentage">13.1%</div>
+                                </div>
+                            </div>
+                            <div class="chart-item">
+                                <div class="chart-label">
+                                    <div class="chart-color" style="background: #065f46;"></div>
+                                    <span>Tomato</span>
+                                </div>
+                                <div class="chart-value">
+                                    <div class="chart-amount">280 tons</div>
+                                    <div class="chart-percentage">11.4%</div>
+                                </div>
+                            </div>
+                            <div class="chart-item">
+                                <div class="chart-label">
+                                    <div class="chart-color" style="background: #064e3b;"></div>
+                                    <span>Onion</span>
+                                </div>
+                                <div class="chart-value">
+                                    <div class="chart-amount">250 tons</div>
+                                    <div class="chart-percentage">10.2%</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chart-container">
+                            <h3 class="chart-title">Storage Utilization</h3>
+                            <div style="margin-bottom: 16px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                    <span style="font-size: 14px; color: #6b7280;">Current Usage</span>
+                                    <span style="font-size: 14px; color: #6b7280;">2,450 / 5,000 tons</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 49%;"></div>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-size: 12px; color: #6b7280;">
+                                    <span>49% Utilized</span>
+                                    <span>51% Available</span>
+                                </div>
+                            </div>
+                            <div style="border-top: 1px solid #e5e7eb; padding-top: 16px;">
+                                <h4 style="font-weight: 600; margin-bottom: 12px; color: #1f2937;">Warehouse Status</h4>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px;">
+                                    <span style="color: #374151;">Warehouse A</span>
+                                    <span style="font-weight: 600; color: #1f2937;">85% Full</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px;">
+                                    <span style="color: #374151;">Warehouse B</span>
+                                    <span style="font-weight: 600; color: #1f2937;">62% Full</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-size: 14px;">
+                                    <span style="color: #374151;">Warehouse C</span>
+                                    <span style="font-weight: 600; color: #1f2937;">31% Full</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Agricultural Product Page -->
+                <div id="agricultural-product-page" class="page hidden">
+                    <div class="page-header">
+                        <h2 class="page-title">Agricultural Products</h2>
+                        <p class="page-subtitle">Manage seed types, sowing dates, and harvest schedules</p>
+                    </div>
+
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3 class="table-title">Agricultural Product Management</h3>
+                            <div class="table-controls">
+                                <div class="search-box">
+                                    <span class="search-icon">🔍</span>
+                                    <input type="text" class="search-input" placeholder="Search..." onkeyup="searchTable('agricultural-table', this.value)">
+                                </div>
+                                <button class="add-btn" onclick="openModal('agricultural-modal')">
+                                    <span>➕</span>
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+                        <table class="table" id="agricultural-table">
+                            <thead>
+                                <tr>
+                                    <th>Seed Type</th>
+                                    <th>Sowing Date</th>
+                                    <th>Expected Harvest Date</th>
+                                    <th>Farmer Name</th>
+                                    <th>Plot Size (acres)</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Basmati Rice</td>
+                                    <td>2024-01-15</td>
+                                    <td>2024-05-15</td>
+                                    <td>Karim Ahmed</td>
+                                    <td>2.5</td>
+                                    <td><span class="status-badge status-good">Growing</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('agricultural', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Wheat (Local)</td>
+                                    <td>2024-02-01</td>
+                                    <td>2024-06-01</td>
+                                    <td>Rahim Uddin</td>
+                                    <td>3.0</td>
+                                    <td><span class="status-badge status-good">Growing</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('agricultural', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Potato</td>
+                                    <td>2024-01-20</td>
+                                    <td>2024-04-20</td>
+                                    <td>Fatima Begum</td>
+                                    <td>1.8</td>
+                                    <td><span class="status-badge status-fresh">Ready for Harvest</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('agricultural', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Tomato</td>
+                                    <td>2024-02-10</td>
+                                    <td>2024-05-10</td>
+                                    <td>Abdul Majid</td>
+                                    <td>1.2</td>
+                                    <td><span class="status-badge status-good">Growing</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('agricultural', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Harvested Crops Page -->
+                <div id="harvested-crops-page" class="page hidden">
+                    <div class="page-header">
+                        <h2 class="page-title">Harvested Crops</h2>
+                        <p class="page-subtitle">Track all harvested crops with quantities and quality grades</p>
+                    </div>
+
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3 class="table-title">Harvested Crops Inventory</h3>
+                            <div class="table-controls">
+                                <div class="search-box">
+                                    <span class="search-icon">🔍</span>
+                                    <input type="text" class="search-input" placeholder="Search..." onkeyup="searchTable('harvested-table', this.value)">
+                                </div>
+                                <button class="add-btn" onclick="openModal('harvested-modal')">
+                                    <span>➕</span>
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+                        <table class="table" id="harvested-table">
+                            <thead>
+                                <tr>
+                                    <th>Crop Name</th>
+                                    <th>Crop Type</th>
+                                    <th>Quantity (kg)</th>
+                                    <th>Harvest Date</th>
+                                    <th>Farmer Name</th>
+                                    <th>Quality</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Basmati Rice</td>
+                                    <td>Cereal</td>
+                                    <td>2500</td>
+                                    <td>2024-01-15</td>
+                                    <td>Karim Ahmed</td>
+                                    <td><span class="status-badge status-fresh">Grade A</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('harvested', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Potato</td>
+                                    <td>Vegetable</td>
+                                    <td>1800</td>
+                                    <td>2024-01-20</td>
+                                    <td>Fatima Begum</td>
+                                    <td><span class="status-badge status-fresh">Grade A</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('harvested', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Tomato</td>
+                                    <td>Vegetable</td>
+                                    <td>1200</td>
+                                    <td>2024-01-25</td>
+                                    <td>Abdul Majid</td>
+                                    <td><span class="status-badge status-warning">Grade B</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('harvested', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Wheat</td>
+                                    <td>Cereal</td>
+                                    <td>3200</td>
+                                    <td>2024-02-01</td>
+                                    <td>Rahim Uddin</td>
+                                    <td><span class="status-badge status-fresh">Grade A</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('harvested', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Inventory Pad Page - Updated with Table -->
+                <div id="inventory-pad-page" class="page hidden">
+                    <div class="page-header">
+                        <h2 class="page-title">Inventory Pad - Stock Levels</h2>
+                        <p class="page-subtitle">Monitor inventory stock levels and storage capacity</p>
+                    </div>
+
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3 class="table-title">Inventory Stock Level Management</h3>
+                            <div class="table-controls">
+                                <div class="search-box">
+                                    <span class="search-icon">🔍</span>
+                                    <input type="text" class="search-input" placeholder="Search..." onkeyup="searchTable('inventory-table', this.value)">
+                                </div>
+                                <button class="add-btn" onclick="openModal('inventory-modal')">
+                                    <span>➕</span>
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+                        <table class="table" id="inventory-table">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Category</th>
+                                    <th>Current Stock (tons)</th>
+                                    <th>Max Capacity (tons)</th>
+                                    <th>Utilization</th>
+                                    <th>Stock Level</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Rice</td>
+                                    <td>Cereal</td>
+                                    <td>450</td>
+                                    <td>500</td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <div class="table-progress-bar">
+                                                <div class="table-progress-fill danger" style="width: 90%;"></div>
+                                            </div>
+                                            <span style="font-size: 12px; color: #6b7280;">90%</span>
+                                        </div>
+                                    </td>
+                                    <td>90% Full</td>
+                                    <td><span class="status-badge status-critical">Critical</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('inventory', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Wheat</td>
+                                    <td>Cereal</td>
+                                    <td>380</td>
+                                    <td>450</td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <div class="table-progress-bar">
+                                                <div class="table-progress-fill warning" style="width: 84%;"></div>
+                                            </div>
+                                            <span style="font-size: 12px; color: #6b7280;">84%</span>
+                                        </div>
+                                    </td>
+                                    <td>84% Full</td>
+                                    <td><span class="status-badge status-warning">High</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('inventory', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Potato</td>
+                                    <td>Vegetable</td>
+                                    <td>320</td>
+                                    <td>400</td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <div class="table-progress-bar">
+                                                <div class="table-progress-fill warning" style="width: 80%;"></div>
+                                            </div>
+                                            <span style="font-size: 12px; color: #6b7280;">80%</span>
+                                        </div>
+                                    </td>
+                                    <td>80% Full</td>
+                                    <td><span class="status-badge status-warning">High</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('inventory', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Tomato</td>
+                                    <td>Vegetable</td>
+                                    <td>280</td>
+                                    <td>350</td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <div class="table-progress-bar">
+                                                <div class="table-progress-fill warning" style="width: 80%;"></div>
+                                            </div>
+                                            <span style="font-size: 12px; color: #6b7280;">80%</span>
+                                        </div>
+                                    </td>
+                                    <td>80% Full</td>
+                                    <td><span class="status-badge status-warning">High</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('inventory', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Onion</td>
+                                    <td>Vegetable</td>
+                                    <td>250</td>
+                                    <td>300</td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <div class="table-progress-bar">
+                                                <div class="table-progress-fill warning" style="width: 83%;"></div>
+                                            </div>
+                                            <span style="font-size: 12px; color: #6b7280;">83%</span>
+                                        </div>
+                                    </td>
+                                    <td>83% Full</td>
+                                    <td><span class="status-badge status-warning">High</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('inventory', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Corn</td>
+                                    <td>Cereal</td>
+                                    <td>180</td>
+                                    <td>250</td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <div class="table-progress-bar">
+                                                <div class="table-progress-fill normal" style="width: 72%;"></div>
+                                            </div>
+                                            <span style="font-size: 12px; color: #6b7280;">72%</span>
+                                        </div>
+                                    </td>
+                                    <td>72% Full</td>
+                                    <td><span class="status-badge status-good">Normal</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('inventory', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Carrot</td>
+                                    <td>Vegetable</td>
+                                    <td>120</td>
+                                    <td>200</td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <div class="table-progress-bar">
+                                                <div class="table-progress-fill normal" style="width: 60%;"></div>
+                                            </div>
+                                            <span style="font-size: 12px; color: #6b7280;">60%</span>
+                                        </div>
+                                    </td>
+                                    <td>60% Full</td>
+                                    <td><span class="status-badge status-good">Normal</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('inventory', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Cabbage</td>
+                                    <td>Vegetable</td>
+                                    <td>90</td>
+                                    <td>180</td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <div class="table-progress-bar">
+                                                <div class="table-progress-fill normal" style="width: 50%;"></div>
+                                            </div>
+                                            <span style="font-size: 12px; color: #6b7280;">50%</span>
+                                        </div>
+                                    </td>
+                                    <td>50% Full</td>
+                                    <td><span class="status-badge status-good">Normal</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('inventory', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Post Harvested Crops Page -->
+                <div id="post-harvested-crops-page" class="page hidden">
+                    <div class="page-header">
+                        <h2 class="page-title">Post Harvested Crops</h2>
+                        <p class="page-subtitle">Track upcoming harvests and crop development stages</p>
+                    </div>
+
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3 class="table-title">Upcoming Harvest Schedule</h3>
+                            <div class="table-controls">
+                                <div class="search-box">
+                                    <span class="search-icon">🔍</span>
+                                    <input type="text" class="search-input" placeholder="Search..." onkeyup="searchTable('post-harvested-table', this.value)">
+                                </div>
+                                <button class="add-btn" onclick="openModal('post-harvested-modal')">
+                                    <span>➕</span>
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+                        <table class="table" id="post-harvested-table">
+                            <thead>
+                                <tr>
+                                    <th>Crop Name</th>
+                                    <th>Expected Quantity (kg)</th>
+                                    <th>Expected Date</th>
+                                    <th>Fertilizer Used</th>
+                                    <th>Farmer Name</th>
+                                    <th>Current Stage</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Boro Rice</td>
+                                    <td>3500</td>
+                                    <td>2024-05-15</td>
+                                    <td>Urea, TSP, MOP</td>
+                                    <td>Shahid Alam</td>
+                                    <td><span class="status-badge status-good">Flowering</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('post-harvested', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Summer Tomato</td>
+                                    <td>1800</td>
+                                    <td>2024-04-20</td>
+                                    <td>NPK, Organic Compost</td>
+                                    <td>Rashida Khatun</td>
+                                    <td><span class="status-badge status-warning">Fruit Development</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('post-harvested', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Sweet Corn</td>
+                                    <td>2200</td>
+                                    <td>2024-04-30</td>
+                                    <td>DAP, Urea</td>
+                                    <td>Mizanur Rahman</td>
+                                    <td><span class="status-badge status-fresh">Grain Filling</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('post-harvested', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Top FEFO Page -->
+                <div id="top-fefo-page" class="page hidden">
+                    <div class="page-header">
+                        <h2 class="page-title">Top FEFO Products</h2>
+                        <p class="page-subtitle">First Expired, First Out - Products prioritized by expiry date</p>
+                    </div>
+
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3 class="table-title">Top 10 FEFO Priority Products</h3>
+                            <div class="table-controls">
+                                <div class="search-box">
+                                    <span class="search-icon">🔍</span>
+                                    <input type="text" class="search-input" placeholder="Search..." onkeyup="searchTable('fefo-table', this.value)">
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table" id="fefo-table">
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Product Name</th>
+                                    <th>Batch Number</th>
+                                    <th>Expiry Date</th>
+                                    <th>Quantity (kg)</th>
+                                    <th>Days to Expiry</th>
+                                    <th>Urgency</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Leafy Vegetables</td>
+                                    <td>LFV-023</td>
+                                    <td>2024-03-08</td>
+                                    <td>45</td>
+                                    <td>5</td>
+                                    <td><span class="status-badge status-critical">Critical</span></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Tomato</td>
+                                    <td>TOM-018</td>
+                                    <td>2024-03-10</td>
+                                    <td>120</td>
+                                    <td>7</td>
+                                    <td><span class="status-badge status-critical">Critical</span></td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Cucumber</td>
+                                    <td>CUC-021</td>
+                                    <td>2024-03-12</td>
+                                    <td>80</td>
+                                    <td>9</td>
+                                    <td><span class="status-badge status-warning">High</span></td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>Bell Pepper</td>
+                                    <td>BLP-015</td>
+                                    <td>2024-03-15</td>
+                                    <td>60</td>
+                                    <td>12</td>
+                                    <td><span class="status-badge status-warning">High</span></td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>Broccoli</td>
+                                    <td>BRC-009</td>
+                                    <td>2024-03-18</td>
+                                    <td>75</td>
+                                    <td>15</td>
+                                    <td><span class="status-badge status-good">Medium</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Top FIFO Page -->
+                <div id="top-fifo-page" class="page hidden">
+                    <div class="page-header">
+                        <h2 class="page-title">Top FIFO Products</h2>
+                        <p class="page-subtitle">First In, First Out - Products that should be dispatched first</p>
+                    </div>
+
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3 class="table-title">Top 10 FIFO Priority Products</h3>
+                            <div class="table-controls">
+                                <div class="search-box">
+                                    <span class="search-icon">🔍</span>
+                                    <input type="text" class="search-input" placeholder="Search..." onkeyup="searchTable('fifo-table', this.value)">
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table" id="fifo-table">
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Product Name</th>
+                                    <th>Batch Number</th>
+                                    <th>Entry Date</th>
+                                    <th>Quantity (kg)</th>
+                                    <th>Days in Storage</th>
+                                    <th>Priority</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Potato</td>
+                                    <td>PTT-001</td>
+                                    <td>2024-01-05</td>
+                                    <td>500</td>
+                                    <td>58</td>
+                                    <td><span class="status-badge status-warning">High</span></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Onion</td>
+                                    <td>ONI-003</td>
+                                    <td>2024-01-08</td>
+                                    <td>350</td>
+                                    <td>55</td>
+                                    <td><span class="status-badge status-warning">High</span></td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Tomato</td>
+                                    <td>TOM-012</td>
+                                    <td>2024-01-12</td>
+                                    <td>280</td>
+                                    <td>51</td>
+                                    <td><span class="status-badge status-good">Medium</span></td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>Carrot</td>
+                                    <td>CAR-008</td>
+                                    <td>2024-01-15</td>
+                                    <td>200</td>
+                                    <td>48</td>
+                                    <td><span class="status-badge status-good">Medium</span></td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>Cabbage</td>
+                                    <td>CAB-005</td>
+                                    <td>2024-01-18</td>
+                                    <td>180</td>
+                                    <td>45</td>
+                                    <td><span class="status-badge status-good">Medium</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Perishable Product Page -->
+                <div id="perishable-product-page" class="page hidden">
+                    <div class="page-header">
+                        <h2 class="page-title">Perishable Products</h2>
+                        <p class="page-subtitle">Monitor perishable products with batch details and expiry dates</p>
+                    </div>
+
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3 class="table-title">Perishable Product Inventory</h3>
+                            <div class="table-controls">
+                                <div class="search-box">
+                                    <span class="search-icon">🔍</span>
+                                    <input type="text" class="search-input" placeholder="Search..." onkeyup="searchTable('perishable-table', this.value)">
+                                </div>
+                                <button class="add-btn" onclick="openModal('perishable-modal')">
+                                    <span>➕</span>
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+                        <table class="table" id="perishable-table">
+                            <thead>
+                                <tr>
+                                    <th>Batch Number</th>
+                                    <th>Crop Name</th>
+                                    <th>Variety</th>
+                                    <th>Quantity (kg)</th>
+                                    <th>Entry Date</th>
+                                    <th>Expiry Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>PER-001</td>
+                                    <td>Tomato</td>
+                                    <td>Cherry Tomato</td>
+                                    <td>150</td>
+                                    <td>2024-02-28</td>
+                                    <td>2024-03-10</td>
+                                    <td><span class="status-badge status-fresh">Fresh</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('perishable', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>PER-002</td>
+                                    <td>Lettuce</td>
+                                    <td>Iceberg</td>
+                                    <td>80</td>
+                                    <td>2024-03-01</td>
+                                    <td>2024-03-08</td>
+                                    <td><span class="status-badge status-critical">Critical</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('perishable', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>PER-003</td>
+                                    <td>Spinach</td>
+                                    <td>Baby Spinach</td>
+                                    <td>60</td>
+                                    <td>2024-03-02</td>
+                                    <td>2024-03-09</td>
+                                    <td><span class="status-badge status-critical">Critical</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('perishable', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>PER-004</td>
+                                    <td>Cucumber</td>
+                                    <td>English Cucumber</td>
+                                    <td>120</td>
+                                    <td>2024-02-25</td>
+                                    <td>2024-03-12</td>
+                                    <td><span class="status-badge status-good">Good</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('perishable', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Storage Condition Page -->
+                <div id="storage-condition-page" class="page hidden">
+                    <div class="page-header">
+                        <h2 class="page-title">Storage Conditions</h2>
+                        <p class="page-subtitle">Monitor temperature, humidity, and capacity of all storage facilities</p>
+                    </div>
+
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3 class="table-title">Storage Facility Conditions</h3>
+                            <div class="table-controls">
+                                <div class="search-box">
+                                    <span class="search-icon">🔍</span>
+                                    <input type="text" class="search-input" placeholder="Search..." onkeyup="searchTable('storage-table', this.value)">
+                                </div>
+                                <button class="add-btn" onclick="openModal('storage-modal')">
+                                    <span>➕</span>
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+                        <table class="table" id="storage-table">
+                            <thead>
+                                <tr>
+                                    <th>Warehouse ID</th>
+                                    <th>Temperature (°C)</th>
+                                    <th>Humidity (%)</th>
+                                    <th>Max Capacity (tons)</th>
+                                    <th>Occupied Space (tons)</th>
+                                    <th>Utilization (%)</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>WH-001</td>
+                                    <td>18</td>
+                                    <td>65</td>
+                                    <td>1000</td>
+                                    <td>850</td>
+                                    <td>85</td>
+                                    <td><span class="status-badge status-fresh">Optimal</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('storage', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>WH-002</td>
+                                    <td>16</td>
+                                    <td>70</td>
+                                    <td>1200</td>
+                                    <td>744</td>
+                                    <td>62</td>
+                                    <td><span class="status-badge status-good">Good</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('storage', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>WH-003</td>
+                                    <td>20</td>
+                                    <td>60</td>
+                                    <td>800</td>
+                                    <td>248</td>
+                                    <td>31</td>
+                                    <td><span class="status-badge status-good">Good</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('storage', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>WH-004</td>
+                                    <td>22</td>
+                                    <td>75</td>
+                                    <td>1500</td>
+                                    <td>1200</td>
+                                    <td>80</td>
+                                    <td><span class="status-badge status-warning">Warning</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" onclick="editRecord('storage', this)">
+                                                <span class="action-icon">✏️</span>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteRecord(this)">
+                                                <span class="action-icon">🗑️</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Forms -->
+    
+    <!-- Agricultural Product Modal -->
+    <div id="agricultural-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add Agricultural Product</h3>
+                <button class="close-btn" onclick="closeModal('agricultural-modal')">&times;</button>
+            </div>
+            <form id="agricultural-form" onsubmit="submitForm(event, 'agricultural')">
+                <div class="form-group">
+                    <label class="form-label">Seed Type</label>
+                    <input type="text" class="form-input" name="seedType" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Sowing Date</label>
+                    <input type="date" class="form-input" name="sowingDate" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Expected Harvest Date</label>
+                    <input type="date" class="form-input" name="expectedHarvestDate" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Farmer Name</label>
+                    <input type="text" class="form-input" name="farmerName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Plot Size (acres)</label>
+                    <input type="number" step="0.1" class="form-input" name="plotSize" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" name="status" required>
+                        <option value="">Select Status</option>
+                        <option value="Growing">Growing</option>
+                        <option value="Ready for Harvest">Ready for Harvest</option>
+                        <option value="Harvested">Harvested</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('agricultural-modal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Harvested Crops Modal -->
+    <div id="harvested-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add Harvested Crop</h3>
+                <button class="close-btn" onclick="closeModal('harvested-modal')">&times;</button>
+            </div>
+            <form id="harvested-form" onsubmit="submitForm(event, 'harvested')">
+                <div class="form-group">
+                    <label class="form-label">Crop Name</label>
+                    <input type="text" class="form-input" name="cropName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Crop Type</label>
+                    <select class="form-select" name="cropType" required>
+                        <option value="">Select Type</option>
+                        <option value="Cereal">Cereal</option>
+                        <option value="Vegetable">Vegetable</option>
+                        <option value="Fruit">Fruit</option>
+                        <option value="Legume">Legume</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Quantity (kg)</label>
+                    <input type="number" class="form-input" name="quantity" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Harvest Date</label>
+                    <input type="date" class="form-input" name="harvestDate" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Farmer Name</label>
+                    <input type="text" class="form-input" name="farmerName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Quality Grade</label>
+                    <select class="form-select" name="quality" required>
+                        <option value="">Select Grade</option>
+                        <option value="Grade A">Grade A</option>
+                        <option value="Grade B">Grade B</option>
+                        <option value="Grade C">Grade C</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('harvested-modal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Crop</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Inventory Pad Modal -->
+    <div id="inventory-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add Inventory Item</h3>
+                <button class="close-btn" onclick="closeModal('inventory-modal')">&times;</button>
+            </div>
+            <form id="inventory-form" onsubmit="submitForm(event, 'inventory')">
+                <div class="form-group">
+                    <label class="form-label">Product Name</label>
+                    <input type="text" class="form-input" name="productName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select class="form-select" name="category" required>
+                        <option value="">Select Category</option>
+                        <option value="Cereal">Cereal</option>
+                        <option value="Vegetable">Vegetable</option>
+                        <option value="Fruit">Fruit</option>
+                        <option value="Legume">Legume</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Current Stock (tons)</label>
+                    <input type="number" class="form-input" name="currentStock" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Max Capacity (tons)</label>
+                    <input type="number" class="form-input" name="maxCapacity" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" name="status" required>
+                        <option value="">Select Status</option>
+                        <option value="Normal">Normal</option>
+                        <option value="High">High</option>
+                        <option value="Critical">Critical</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('inventory-modal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Post Harvested Crops Modal -->
+    <div id="post-harvested-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add Post Harvested Crop</h3>
+                <button class="close-btn" onclick="closeModal('post-harvested-modal')">&times;</button>
+            </div>
+            <form id="post-harvested-form" onsubmit="submitForm(event, 'post-harvested')">
+                <div class="form-group">
+                    <label class="form-label">Crop Name</label>
+                    <input type="text" class="form-input" name="cropName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Expected Quantity (kg)</label>
+                    <input type="number" class="form-input" name="expectedQuantity" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Expected Harvest Date</label>
+                    <input type="date" class="form-input" name="expectedDate" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Fertilizer Used</label>
+                    <input type="text" class="form-input" name="fertilizerUsed" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Farmer Name</label>
+                    <input type="text" class="form-input" name="farmerName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Current Stage</label>
+                    <select class="form-select" name="currentStage" required>
+                        <option value="">Select Stage</option>
+                        <option value="Seedling">Seedling</option>
+                        <option value="Vegetative">Vegetative</option>
+                        <option value="Flowering">Flowering</option>
+                        <option value="Fruit Development">Fruit Development</option>
+                        <option value="Grain Filling">Grain Filling</option>
+                        <option value="Maturation">Maturation</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('post-harvested-modal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Crop</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Perishable Product Modal -->
+    <div id="perishable-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add Perishable Product</h3>
+                <button class="close-btn" onclick="closeModal('perishable-modal')">&times;</button>
+            </div>
+            <form id="perishable-form" onsubmit="submitForm(event, 'perishable')">
+                <div class="form-group">
+                    <label class="form-label">Batch Number</label>
+                    <input type="text" class="form-input" name="batchNumber" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Crop Name</label>
+                    <input type="text" class="form-input" name="cropName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Variety</label>
+                    <input type="text" class="form-input" name="variety" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Quantity (kg)</label>
+                    <input type="number" class="form-input" name="quantity" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Entry Date</label>
+                    <input type="date" class="form-input" name="entryDate" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Expiry Date</label>
+                    <input type="date" class="form-input" name="expiryDate" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" name="status" required>
+                        <option value="">Select Status</option>
+                        <option value="Fresh">Fresh</option>
+                        <option value="Good">Good</option>
+                        <option value="Critical">Critical</option>
+                        <option value="Expired">Expired</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('perishable-modal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Storage Condition Modal -->
+    <div id="storage-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add Storage Facility</h3>
+                <button class="close-btn" onclick="closeModal('storage-modal')">&times;</button>
+            </div>
+            <form id="storage-form" onsubmit="submitForm(event, 'storage')">
+                <div class="form-group">
+                    <label class="form-label">Warehouse ID</label>
+                    <input type="text" class="form-input" name="warehouseId" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Temperature (°C)</label>
+                    <input type="number" class="form-input" name="temperature" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Humidity (%)</label>
+                    <input type="number" min="0" max="100" class="form-input" name="humidity" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Max Capacity (tons)</label>
+                    <input type="number" class="form-input" name="maxCapacity" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Occupied Space (tons)</label>
+                    <input type="number" class="form-input" name="occupiedSpace" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" name="status" required>
+                        <option value="">Select Status</option>
+                        <option value="Optimal">Optimal</option>
+                        <option value="Good">Good</option>
+                        <option value="Warning">Warning</option>
+                        <option value="Critical">Critical</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('storage-modal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Facility</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 'home';
+
+        // Navigation Functions
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.add('hidden'));
+
+            // Show selected page
+            const targetPage = document.getElementById(pageId + '-page');
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+            }
+
+            // Update navigation active states
+            const navButtons = document.querySelectorAll('.nav-button');
+            navButtons.forEach(btn => btn.classList.remove('active'));
+
+            const dropdownItems = document.querySelectorAll('.dropdown-item');
+            dropdownItems.forEach(item => item.classList.remove('active'));
+
+            // Set active state for main nav or dropdown item
+            if (['harvested-crops', 'inventory-pad', 'post-harvested-crops', 'top-fefo', 'top-fifo'].includes(pageId)) {
+                // It's a surveillance dropdown item
+                document.getElementById('surveillance-dropdown').classList.add('show');
+                const dropdownItem = Array.from(dropdownItems).find(item => 
+                    item.textContent.toLowerCase().replace(/\s+/g, '-') === pageId ||
+                    (pageId === 'top-fefo' && item.textContent.includes('FEFO')) ||
+                    (pageId === 'top-fifo' && item.textContent.includes('FIFO'))
+                );
+                if (dropdownItem) {
+                    dropdownItem.classList.add('active');
+                }
+            } else {
+                // It's a main navigation item
+                const navButton = Array.from(navButtons).find(btn => 
+                    btn.textContent.toLowerCase().replace(/\s+/g, '-').includes(pageId) ||
+                    (pageId === 'home' && btn.textContent.includes('Home')) ||
+                    (pageId === 'agricultural-product' && btn.textContent.includes('Agricultural')) ||
+                    (pageId === 'perishable-product' && btn.textContent.includes('Perishable')) ||
+                    (pageId === 'storage-condition' && btn.textContent.includes('Storage'))
+                );
+                if (navButton) {
+                    navButton.classList.add('active');
+                }
+            }
+
+            currentPage = pageId;
+        }
+
+        function toggleDropdown(dropdownId) {
+            const dropdown = document.getElementById(dropdownId + '-dropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('show');
+            }
+        }
+
+        // Modal Functions
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('show');
+                // Reset form
+                const form = modal.querySelector('form');
+                if (form) {
+                    form.reset();
+                }
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('show');
+            }
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('show');
+            }
+        });
+
+        // Form Submission
+        function submitForm(event, type) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const data = {};
+            
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+
+            // Add the new row to the appropriate table
+            addRowToTable(type, data);
+            
+            // Close the modal
+            closeModal(type + '-modal');
+            
+            // Show success message
+            alert(`${type.charAt(0).toUpperCase() + type.slice(1)} added successfully!`);
+        }
+
+        function addRowToTable(type, data) {
+            let tableId, newRow;
+            
+            switch(type) {
+                case 'agricultural':
+                    tableId = 'agricultural-table';
+                    newRow = `
+                        <tr>
+                            <td>${data.seedType}</td>
+                            <td>${data.sowingDate}</td>
+                            <td>${data.expectedHarvestDate}</td>
+                            <td>${data.farmerName}</td>
+                            <td>${data.plotSize}</td>
+                            <td><span class="status-badge status-good">${data.status}</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="action-btn" onclick="editRecord('agricultural', this)">
+                                        <span class="action-icon">✏️</span>
+                                    </button>
+                                    <button class="action-btn delete" onclick="deleteRecord(this)">
+                                        <span class="action-icon">🗑️</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    break;
+                    
+                case 'harvested':
+                    tableId = 'harvested-table';
+                    newRow = `
+                        <tr>
+                            <td>${data.cropName}</td>
+                            <td>${data.cropType}</td>
+                            <td>${data.quantity}</td>
+                            <td>${data.harvestDate}</td>
+                            <td>${data.farmerName}</td>
+                            <td><span class="status-badge status-fresh">${data.quality}</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="action-btn" onclick="editRecord('harvested', this)">
+                                        <span class="action-icon">✏️</span>
+                                    </button>
+                                    <button class="action-btn delete" onclick="deleteRecord(this)">
+                                        <span class="action-icon">🗑️</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    break;
+
+                case 'inventory':
+                    tableId = 'inventory-table';
+                    const utilization = Math.round((data.currentStock / data.maxCapacity) * 100);
+                    const progressClass = utilization >= 90 ? 'danger' : utilization >= 75 ? 'warning' : 'normal';
+                    const statusClass = data.status === 'Normal' ? 'status-good' : 
+                                       data.status === 'High' ? 'status-warning' : 'status-critical';
+                    newRow = `
+                        <tr>
+                            <td>${data.productName}</td>
+                            <td>${data.category}</td>
+                            <td>${data.currentStock}</td>
+                            <td>${data.maxCapacity}</td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div class="table-progress-bar">
+                                        <div class="table-progress-fill ${progressClass}" style="width: ${utilization}%;"></div>
+                                    </div>
+                                    <span style="font-size: 12px; color: #6b7280;">${utilization}%</span>
+                                </div>
+                            </td>
+                            <td>${utilization}% Full</td>
+                            <td><span class="status-badge ${statusClass}">${data.status}</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="action-btn" onclick="editRecord('inventory', this)">
+                                        <span class="action-icon">✏️</span>
+                                    </button>
+                                    <button class="action-btn delete" onclick="deleteRecord(this)">
+                                        <span class="action-icon">🗑️</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    break;
+                    
+                case 'post-harvested':
+                    tableId = 'post-harvested-table';
+                    newRow = `
+                        <tr>
+                            <td>${data.cropName}</td>
+                            <td>${data.expectedQuantity}</td>
+                            <td>${data.expectedDate}</td>
+                            <td>${data.fertilizerUsed}</td>
+                            <td>${data.farmerName}</td>
+                            <td><span class="status-badge status-good">${data.currentStage}</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="action-btn" onclick="editRecord('post-harvested', this)">
+                                        <span class="action-icon">✏️</span>
+                                    </button>
+                                    <button class="action-btn delete" onclick="deleteRecord(this)">
+                                        <span class="action-icon">🗑️</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    break;
+                    
+                case 'perishable':
+                    tableId = 'perishable-table';
+                    const perishableStatusClass = data.status === 'Fresh' ? 'status-fresh' : 
+                                       data.status === 'Good' ? 'status-good' : 
+                                       data.status === 'Critical' ? 'status-critical' : 'status-warning';
+                    newRow = `
+                        <tr>
+                            <td>${data.batchNumber}</td>
+                            <td>${data.cropName}</td>
+                            <td>${data.variety}</td>
+                            <td>${data.quantity}</td>
+                            <td>${data.entryDate}</td>
+                            <td>${data.expiryDate}</td>
+                            <td><span class="status-badge ${perishableStatusClass}">${data.status}</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="action-btn" onclick="editRecord('perishable', this)">
+                                        <span class="action-icon">✏️</span>
+                                    </button>
+                                    <button class="action-btn delete" onclick="deleteRecord(this)">
+                                        <span class="action-icon">🗑️</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    break;
+                    
+                case 'storage':
+                    tableId = 'storage-table';
+                    const storageUtilization = Math.round((data.occupiedSpace / data.maxCapacity) * 100);
+                    const storageStatusClass = data.status === 'Optimal' ? 'status-fresh' : 
+                                              data.status === 'Good' ? 'status-good' : 
+                                              data.status === 'Warning' ? 'status-warning' : 'status-critical';
+                    newRow = `
+                        <tr>
+                            <td>${data.warehouseId}</td>
+                            <td>${data.temperature}</td>
+                            <td>${data.humidity}</td>
+                            <td>${data.maxCapacity}</td>
+                            <td>${data.occupiedSpace}</td>
+                            <td>${storageUtilization}</td>
+                            <td><span class="status-badge ${storageStatusClass}">${data.status}</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="action-btn" onclick="editRecord('storage', this)">
+                                        <span class="action-icon">✏️</span>
+                                    </button>
+                                    <button class="action-btn delete" onclick="deleteRecord(this)">
+                                        <span class="action-icon">🗑️</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    break;
+            }
+            
+            const table = document.getElementById(tableId);
+            const tbody = table.querySelector('tbody');
+            tbody.insertAdjacentHTML('beforeend', newRow);
+        }
+
+        // Table Functions
+        function searchTable(tableId, searchTerm) {
+            const table = document.getElementById(tableId);
+            const tbody = table.querySelector('tbody');
+            const rows = tbody.querySelectorAll('tr');
+
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                let found = false;
+                
+                cells.forEach(cell => {
+                    if (cell.textContent.toLowerCase().includes(searchTerm.toLowerCase())) {
+                        found = true;
+                    }
+                });
+
+                if (found || searchTerm === '') {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function editRecord(type, button) {
+            const row = button.closest('tr');
+            const cells = row.querySelectorAll('td');
+            const data = Array.from(cells).slice(0, -1).map(cell => cell.textContent.trim());
+            alert(`Edit ${type} record functionality would be implemented here.\nData: ${data.join(', ')}`);
+        }
+
+        function deleteRecord(button) {
+            if (confirm('Are you sure you want to delete this record?')) {
+                const row = button.closest('tr');
+                row.remove();
+                alert('Record deleted successfully!');
+            }
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                alert('Logout functionality would be implemented here.');
+            }
+        }
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            showPage('home');
+        });
+
+        // Mobile responsiveness
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('mobile-open');
+        }
+
+        // Close mobile sidebar when clicking outside
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const isClickInsideSidebar = sidebar.contains(event.target);
+            
+            if (!isClickInsideSidebar && window.innerWidth <= 768) {
+                sidebar.classList.remove('mobile-open');
+            }
+        });
+    </script>
+</body>
+</html>
